@@ -1,0 +1,14 @@
+{	
+	"id" = 123,
+	"Type" = "vehicle", 
+	"Lng" = 7.123,
+	"Lat" = 45.123,
+	"Elv" = 1231
+}
+
+//-----------------------------------------------------------------------
+id 	: arbritrary id
+Type	: "vehicle", "person" ...? 
+Lng	: Longitude value
+Lat	: Latitude
+Elv	: Elevation
