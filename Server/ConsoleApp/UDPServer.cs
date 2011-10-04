@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace UdpWSBridge.ConsoleApp
 {
@@ -13,6 +11,28 @@ namespace UdpWSBridge.ConsoleApp
     {
 
         private WSServer wsserver;
+        private string udpadress;
+        private IPAddress ip;
+        private int port;
+
+        public UDPServer()
+        {
+            this.udpadress = "192.168.0.1:8282";
+            string[] parts = udpadress.Split(':');
+            this.ip = IPAddress.Parse(parts[0]);
+            this.port = int.Parse(parts[1]);
+        }
+
+
+        public UDPServer(string udpadress)
+        {
+            string[] parts = udpadress.Split(':');
+            this.ip = IPAddress.Parse(parts[0]);
+            this.port = int.Parse(parts[1]);
+        }
+
+
+
         public void init(WSServer wsserver)
         {
             this.wsserver = wsserver;
@@ -20,23 +40,19 @@ namespace UdpWSBridge.ConsoleApp
             
             int recv;
             byte[] data = new byte[1024];
-            IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 31415);
+            IPEndPoint ipep = new IPEndPoint(IPAddress.Any, this.port);
 
             Socket newsock = new Socket(AddressFamily.InterNetwork,
                             SocketType.Dgram, ProtocolType.Udp);
 
             newsock.Bind(ipep);
-            Console.WriteLine("Waiting for a client...");
+           // Console.WriteLine("Waiting for a client...");
 
             IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
             EndPoint Remote = (EndPoint)(sender);
-           
 
-            /*
-            string welcome = "Welcome to my test server";   //sending of data back to server
-            data = Encoding.ASCII.GetBytes(welcome);
-            newsock.SendTo(data, data.Length, SocketFlags.None, Remote);
-             */
+
+            Console.WriteLine(DateTime.Now + " [UdpServer] server started on: " + this.udpadress);
             //string m = "\x00\x01\x00p[Message]\nsender=eth1\ntimestamp=231.221\n[Location]\npos=3.12312,4.12421,7.21133\nori=355,90,0\nname=ufdhfdhfd";
             while(true)
             {
@@ -44,7 +60,7 @@ namespace UdpWSBridge.ConsoleApp
                recv = newsock.ReceiveFrom(data, ref Remote);
              
                message = Encoding.ASCII.GetString(data, 0, recv);
-               Console.WriteLine(message);
+               Console.WriteLine(DateTime.Now+" [UdpServer] Message received: "+message);
                this.parseMessage(message);
 
             }

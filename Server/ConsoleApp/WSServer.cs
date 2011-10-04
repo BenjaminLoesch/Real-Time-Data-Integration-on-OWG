@@ -7,30 +7,47 @@ using Fleck;
 namespace UdpWSBridge.ConsoleApp
 {
     class WSServer
-    {
+    {   
         List<IWebSocketConnection> allSockets = new List<IWebSocketConnection>();
+        String serveradress;
+
+
+        public WSServer()
+        {
+            this.serveradress = "ws://192.168.0.9:8181";
+
+        }
+
+
+        public WSServer(string serveradress)
+        {
+            this.serveradress = serveradress;
+        }
+
+
 
         public void init()
         {           
-            var server = new WebSocketServer("ws://localhost:8181");
+            var server = new WebSocketServer(this.serveradress);
             server.Start(socket =>
                 {
                     socket.OnOpen = () =>
                         {
-                            Console.WriteLine("WebSocketServer: Started!");
+                            Console.WriteLine(DateTime.Now+" [WebSocketServer] Client connected!");
                             allSockets.Add(socket);
                         };
                     socket.OnClose = () =>
                         {
-                            Console.WriteLine("WebSocketServer: Closed!");
+                            Console.WriteLine(DateTime.Now + " [WebSocketServer] Client disconnected!");
                             allSockets.Remove(socket);
                         };
                     socket.OnMessage = message =>
                         {
-                            Console.WriteLine(message);
+                            Console.WriteLine(DateTime.Now + " [WebSocketServer] received message: " + message);
                         };
 
                 });
+            Console.WriteLine(DateTime.Now + " [WebSocketServer] server started "+this.serveradress);
 
             /*
             string msg;
@@ -59,6 +76,7 @@ namespace UdpWSBridge.ConsoleApp
             {
                 socket.Send(msg); //broadcasting
             }
+            Console.WriteLine(DateTime.Now + " [WebSocketServer] sent message broadcast: " + msg);
 
         }
     }

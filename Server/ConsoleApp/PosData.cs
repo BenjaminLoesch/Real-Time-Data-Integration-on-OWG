@@ -66,7 +66,7 @@ namespace UdpWSBridge.ConsoleApp
             set { timestamp = value; }
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return "---- posdata -----\nID: " + this.id + " \nTimestamp: " + this.timestamp + " \nLng: " + this.lng + " \nLat: " + this.lat + " \nElv: " + this.elv + " \nYaw: " + this.yaw + " \nPitch: " + this.pitch + " \nRoll: " + this.roll;
             

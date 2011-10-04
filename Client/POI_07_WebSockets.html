@@ -74,7 +74,7 @@ function OnNewPosition(positionstring)
 		{
          icon     : "number_1.png",
          //text 		: 	"Position: (" + result[1].toFixed(3) + ", " + result[2].toFixed(3) + ", " + result[3].toFixed(0) + ")",
-         position :  [lng, lat, 200],
+         position :  [lng, lat, elv],
          size 		: 0.1,
          flagpole : true
 		};
@@ -82,7 +82,7 @@ function OnNewPosition(positionstring)
 		trackingpoi = ogCreatePOI(bycicleLayer,NewPoiDefinition);
 	  }
 	  
-	  ogChangePOIPositionWGS84(trackingpoi,lng,lat,570);
+	  ogChangePOIPositionWGS84(trackingpoi,lng,lat,elv);
      
 	  a=1;
       
