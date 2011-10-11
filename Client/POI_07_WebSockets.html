@@ -32,6 +32,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <script type="text/javascript" src="openwebglobe_0.5.js"></script>
+<script type="text/javascript" src="rtposmodule.js"></script>
 
 
 <script type="text/javascript">
@@ -53,41 +54,7 @@ var cam;
 var trackingpoi = -1;
 
 //------------------------------------------------------------------------------
-// New WebSocket Position
-function OnNewPosition(positionstring)
-{
-   // retrieve the scene attached to context:
-   var scene = ogGetScene(ctx);
-   var posjson = eval("("+positionstring.data+")");
-   var lat=posjson.Lat;
-   var lng=posjson.Lng;
-   var elv=posjson.Elv;
-      
-      
-      //cam = ogGetActiveCamera();
-      //ogSetPosition(cam,lng,lat,elv);
-      //ogSetOrientation(cam,0,-90,0);
-      // place a new poi:
-	  if(trackingpoi<0)
-	  {
-		 var NewPoiDefinition = 
-		{
-         icon     : "number_1.png",
-         //text 		: 	"Position: (" + result[1].toFixed(3) + ", " + result[2].toFixed(3) + ", " + result[3].toFixed(0) + ")",
-         position :  [lng, lat, elv],
-         size 		: 0.1,
-         flagpole : true
-		};
-      
-		trackingpoi = ogCreatePOI(bycicleLayer,NewPoiDefinition);
-	  }
-	  
-	  ogChangePOIPositionWGS84(trackingpoi,lng,lat,elv);
-     
-	  a=1;
-      
-}
-//------------------------------------------------------------------------------
+
 function main()
 {
    // (1) create an OpenWebGlobe context using canvas
@@ -152,23 +119,9 @@ function main()
    bycicleLayer = ogCreatePOILayer(world,"byciclelayer");
 
    // reveive position data by websocket server.
-   
-   var ws = new WebSocket('ws://localhost:8181/consoleappsample');
-
-   // when data is comming from the server, this metod is called
-   ws.onmessage = function (evt) {
-       OnNewPosition(evt);
-   };
-
-   // when the connection is established, this method is called
-   ws.onopen = function () {
-       
-   };
-
-   // when the connection is closed, this method is called
-   ws.onclose = function () {
-      
-   }
+   rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample');
+	rtmodule.Init();
+  
    
    //var cam = ogGetActiveCamera(scene);
    ogFlyToLookAtPosition(scene,7.600771,46.762485,500,300,0,-45,0);

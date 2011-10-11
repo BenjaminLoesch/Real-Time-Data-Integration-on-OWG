@@ -9,26 +9,23 @@ namespace UdpWSBridge.ConsoleApp
     class WSServer
     {   
         List<IWebSocketConnection> allSockets = new List<IWebSocketConnection>();
-        String serveradress;
+        private System.Net.IPAddress wsip;
+        private int wsp;
 
 
-        public WSServer()
+        public WSServer(System.Net.IPAddress wsip, int wsp)
         {
-            this.serveradress = "ws://192.168.0.9:8181";
-
-        }
-
-
-        public WSServer(string serveradress)
-        {
-            this.serveradress = serveradress;
+            // TODO: Complete member initialization
+            this.wsip = wsip;
+            this.wsp = wsp;
         }
 
 
 
         public void init()
         {           
-            var server = new WebSocketServer(this.serveradress);
+            var server = new WebSocketServer("ws://"+this.wsip+":"+this.wsp);
+            
             server.Start(socket =>
                 {
                     socket.OnOpen = () =>
@@ -47,7 +44,7 @@ namespace UdpWSBridge.ConsoleApp
                         };
 
                 });
-            Console.WriteLine(DateTime.Now + " [WebSocketServer] server started "+this.serveradress);
+            Console.WriteLine(DateTime.Now + " [WebSocketServer] server started "+this.wsip.ToString()+":"+this.wsp);
 
             /*
             string msg;
@@ -61,11 +58,7 @@ namespace UdpWSBridge.ConsoleApp
             double maxlat = 46.762925;
             double minlat=46.761726;
             */
-    
-
-               
-            
-            
+ 
         }
 
         public void sendPositionUpdate(PosData posdata)
@@ -76,7 +69,7 @@ namespace UdpWSBridge.ConsoleApp
             {
                 socket.Send(msg); //broadcasting
             }
-            Console.WriteLine(DateTime.Now + " [WebSocketServer] sent message broadcast: " + msg);
+            Console.WriteLine(DateTime.Now + " [WebSocketServer] sent message broadcast: \n" + msg+"\n\n");
 
         }
     }
