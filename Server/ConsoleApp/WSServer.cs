@@ -63,7 +63,7 @@ namespace UdpWSBridge.ConsoleApp
 
         public void sendPositionUpdate(PosData posdata)
         {
-            string msg = "{\"id\":\"" + posdata.Id+ "\",\"Lng\":" + posdata.Lng+ ",\"Lat\":" + posdata.Lat + ",\"Elv\":" + posdata.Elv + "}";
+            string msg = "{\"id\":\"" + posdata.Id + "\",\"Lng\":" + posdata.Lng + ",\"Lat\":" + posdata.Lat + ",\"Elv\":" + posdata.Elv + ",\"Yaw\":" + posdata.Yaw + ",\"Pitch\":" + posdata.Pitch + ",\"Roll\":" + posdata.Roll + "}";
 
             foreach (var socket in allSockets.ToList())
             {

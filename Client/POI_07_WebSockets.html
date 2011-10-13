@@ -122,10 +122,12 @@ function main()
    rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample');
 	rtmodule.Init();
   
-   
-   //var cam = ogGetActiveCamera(scene);
-   ogFlyToLookAtPosition(scene,7.600771,46.762485,500,300,0,-45,0);
-   //ogSetOrientation(cam,0,-90,0);
+
+   var cam = ogGetActiveCamera(scene);
+   //ogFlyToLookAtPosition(scene,7.600771,46.762485,500,300,0,-45,0);
+   ogSetPosition(cam,7.600771,46.760578,7000)
+	
+	rtmodule.CreateFrustum(100,2,10,100);
 }
 //------------------------------------------------------------------------------
    
