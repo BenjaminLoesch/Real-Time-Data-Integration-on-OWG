@@ -1,0 +1,29 @@
+Prokoll def:
+
+
+[Message]\n
+	sender=eth1\n
+	message=blablabla\n		-> wird neben/im Frustum angezeigt.
+	timestamp=231.221\n
+	msgcounter=0\n			-> message counter
+	version=0.0\n			-> protcol version
+[Location]\n
+	pos=3.12312,4.12421,7.21133\n   -> lv03 schweizer landeskoordinaten
+	ori=x,y,z,w\n			-> quaternionen parameter
+	quality=0.123\n			-> position quality
+
+
+
+
+PC Files
+
+X Y Z R G B		X,Y,Z -> lv03 schweizer landeskoordinaten
+
+Files a ca. 1000 Pkt. 
+JavaScript Ordner Überwachung.
+Filename = sekunde+milisekunde ->endung .xyz	Bspl: 123123.xyz
+
+
+
+
+

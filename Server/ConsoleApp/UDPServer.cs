@@ -73,71 +73,83 @@ namespace UdpWSBridge.ConsoleApp
 
         private void parseMessage(string message)
         {
-            //check preamble
-            var a = message.IndexOf("\x00\x01\x00");
+           
             string[] parts = { };
 
             message = message.ToLower();
-            if (a > -1)
+
+            PosData posdata = new PosData();
+            parts = message.Split(new String[] { "[" }, StringSplitOptions.RemoveEmptyEntries);
+
+            string[] d = { };
+            foreach (string p in parts)
             {
 
-                PosData posdata = new PosData();
-                parts = message.Split(new String[] { "[" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] b = p.Split(new String[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-                string[] d = { };
-                foreach (string p in parts)
+                switch (b[0])
                 {
-
-                    string[] b = p.Split(new String[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                    switch (b[0])
-                    {
-                        case "message]": //message part found
-                            for (int i = 1; i < b.Length; i++)
+                    case "message]": //message part found
+                        for (int i = 1; i < b.Length; i++)
+                        {
+                            string[] c = b[i].Split(new Char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                            switch (c[0])
                             {
-                                string[] c = b[i].Split(new Char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
-                                switch (c[0])
-                                {
-                                    case "sender": posdata.Id = c[1];
-                                        break;
-                                    case "timestamp": posdata.Timestamp = float.Parse(c[1]);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                            break;
+                                case "sender": posdata.Id = c[1];
+                                    break;
 
-                        case "location]": //message location found  
-                            for (int i = 1; i < b.Length; i++)
+                                case "timestamp": posdata.Timestamp = float.Parse(c[1]);
+                                    break;
+
+                                case "msgcounter": posdata.Msgcount = int.Parse(c[1]);
+                                    break;
+
+                                case "version": posdata.Version = float.Parse(c[1]);
+                                    break;
+
+                                case "message": posdata.Message = c[1];
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        }
+                        break;
+
+                    case "location]": //message location found  
+                        for (int i = 1; i < b.Length; i++)
+                        {
+                            string[] c = b[i].Split(new Char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                            switch (c[0])
                             {
-                                string[] c = b[i].Split(new Char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
-                                switch (c[0])
-                                {
+                                case "pos":
+                                    d = c[1].Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                                    posdata.X = float.Parse(d[0]);
+                                    posdata.Y = float.Parse(d[1]);
+                                    posdata.Elv = float.Parse(d[2]);
+                                    break;
 
-                                    case "pos":
-                                        d = c[1].Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                        posdata.Lng = float.Parse(d[0]);
-                                        posdata.Lat = float.Parse(d[1]);
-                                        posdata.Elv = float.Parse(d[2]);
-                                        break;
-                                    case "ori":
-                                        d = c[1].Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                        posdata.Yaw = float.Parse(d[0]);
-                                        posdata.Pitch = float.Parse(d[1]);
-                                        posdata.Roll = float.Parse(d[2]);
-                                        break;
-                                    default:
-                                        break;
-                                }
+                                case "ori":
+                                    d = c[1].Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                                    posdata.Quat_x = float.Parse(d[0]);
+                                    posdata.Quat_y = float.Parse(d[1]);
+                                    posdata.Quat_z = float.Parse(d[2]);
+                                    posdata.Quat_w = float.Parse(d[3]);
+                                    break;
+
+                                case "quality":
+                                    posdata.Quality = float.Parse(c[1]);
+                                    break;
+                                default:
+                                    break;
                             }
-                            break;
-                    }
+                        }
+                        break;
                 }
-
-                this.wsserver.sendPositionUpdate(posdata);
-                //Console.WriteLine(posdata.ToString());
             }
+
+            this.wsserver.sendPositionUpdate(posdata);
+ 
 
 
         }

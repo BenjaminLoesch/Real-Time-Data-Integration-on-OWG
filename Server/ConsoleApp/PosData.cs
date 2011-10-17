@@ -14,19 +14,19 @@ namespace UdpWSBridge.ConsoleApp
             get { return id; }
             set { id = value; }
         }
-        private float lng=-1;
+        private float x=-1;
 
-        public float Lng
+        public float X
         {
-            get { return lng; }
-            set { lng = value; }
+            get { return x; }
+            set { x = value; }
         }
-        private float lat=-1;
+        private float y=-1;
 
-        public float Lat
+        public float Y
         {
-            get { return lat; }
-            set { lat = value; }
+            get { return y; }
+            set { y = value; }
         }
         private float elv=-1;
 
@@ -35,29 +35,6 @@ namespace UdpWSBridge.ConsoleApp
             get { return elv; }
             set { elv = value; }
         }
-        private float yaw=-1;
-
-        public float Yaw
-        {
-            get { return yaw; }
-            set { yaw = value; }
-        }
-        private float pitch=-1;
-
-        public float Pitch
-        {
-            get { return pitch; }
-            set { pitch = value; }
-        }
-        private float roll=-1;
-
-        public float Roll
-        {
-            get { return roll; }
-            set { roll = value; }
-        }
-
-
         private float timestamp=-1;
 
         public float Timestamp
@@ -68,8 +45,73 @@ namespace UdpWSBridge.ConsoleApp
 
         public override string ToString()
         {
-            return "---- posdata -----\nID: " + this.id + " \nTimestamp: " + this.timestamp + " \nLng: " + this.lng + " \nLat: " + this.lat + " \nElv: " + this.elv + " \nYaw: " + this.yaw + " \nPitch: " + this.pitch + " \nRoll: " + this.roll;
+            return "---- posdata -----\nID: " + this.id + " \nTimestamp: " + this.timestamp + " \nX: " + this.x + " \nY: " + this.y + " \nElv: " + this.elv + " \nQx: " + this.quat_x + " \nQy: " + this.quat_y + " \nQz: " + this.quat_z + " \nQw: " + this.quat_w +
+                "\nMsgCount: " + this.msgcount + "\nQuality: " + this.quality + "\nMessage :" + this.message;
             
+        }
+
+        private int msgcount;
+
+        public int Msgcount
+        {
+            get { return msgcount; }
+            set { msgcount = value; }
+        }
+
+        private float version;
+
+        public float Version
+        {
+            get { return version; }
+            set { version = value; }
+        }
+
+        private string message;
+
+        public string Message
+        {
+            get { return message; }
+            set { message = value; }
+        }
+
+        private float quality;
+
+        public float Quality
+        {
+            get { return quality; }
+            set { quality = value; }
+        }
+
+        private float quat_x;
+
+        public float Quat_x
+        {
+            get { return quat_x; }
+            set { quat_x = value; }
+        }
+
+        private float quat_y;
+
+        public float Quat_y
+        {
+            get { return quat_y; }
+            set { quat_y = value; }
+        }
+
+        private float quat_z;
+
+        public float Quat_z
+        {
+            get { return quat_z; }
+            set { quat_z = value; }
+        }
+
+        private float quat_w;
+
+        public float Quat_w
+        {
+            get { return quat_w; }
+            set { quat_w = value; }
         }
     }
 }

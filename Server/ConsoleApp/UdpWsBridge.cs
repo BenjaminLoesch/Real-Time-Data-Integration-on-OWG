@@ -13,10 +13,10 @@ namespace UdpWSBridge.ConsoleApp
         {
             //parameter from console "-wsp" web-scoket port
             int wsp = 4123;
-            IPAddress wsip = IPAddress.Loopback;//Dns.GetHostAddresses(Dns.GetHostName());
+            IPAddress wsip =  IPAddress.Loopback;//IPAddress.Parse("192.168.0.1");
 
             int udpp = 4051;
-            IPAddress udpip = IPAddress.Loopback;//Dns.GetHostAddresses(Dns.GetHostName())[1];
+            IPAddress udpip = IPAddress.Loopback;//IPAddress.Parse("192.168.0.1");
             
             
             WSServer ws = new WSServer(wsip,wsp);

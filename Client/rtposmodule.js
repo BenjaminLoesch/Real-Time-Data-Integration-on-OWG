@@ -112,13 +112,19 @@ RtPosModule.prototype.OnNewPosition = function(message)
 {
    // retrieve the scene attached to context:
    var posjson = eval("("+message.data+")");
-   var lat=posjson.Lat;
-   var lng=posjson.Lng;
+   var lat=CHtoWGSlat(posjson.Y,posjson.X);
+   var lng=CHtoWGSlng(posjson.Y,posjson.X);
    var elv=posjson.Elv;
-   var id=posjson.id;
-	var yaw = posjson.Yaw;
-	var pitch = posjson.Pitch;
-	var roll = posjson.Roll;
+   var id=posjson.Id;
+	var qx = posjson.Qx;
+	var qy = posjson.Qy;
+	var qz = posjson.Qz;
+	var qw = posjson.Qw;
+	var msg = posjson.Message;
+	var msgcount = posjson.MsgCount;
+	var quality = posjson.Quality;
+	
+	
    
 
    var ogid = -1;
@@ -140,7 +146,8 @@ RtPosModule.prototype.OnNewPosition = function(message)
 		}
 		else
 		{
-			ogSetGeometryPositionWGS84(ogid,lng,lat,elv,yaw,pitch,roll);
+			var quaternion =[qx,qy,qz,qw];
+			ogSetGeometryPositionWGS84Quat(ogid,lng,lat,elv,quaternion);
 		}
 
    }
