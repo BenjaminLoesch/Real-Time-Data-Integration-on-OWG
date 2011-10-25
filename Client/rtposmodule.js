@@ -23,7 +23,7 @@
 
 // todo: error check: wenn irgendwo eine falsche message reinkommt ignorieren.
 // todo: follow mode- on/off camera verfolgt die aktuelle pos und orientierung
-// todo: 
+
 
 
 
@@ -35,6 +35,7 @@
  */
 function RtPosModule(scene,wsaddress,poimode)
 {
+	
    this.scene = scene;
 	this.world = ogGetWorld(scene);
    
@@ -45,7 +46,7 @@ function RtPosModule(scene,wsaddress,poimode)
 	this.geolayer = null;
 	this.geolayer = ogCreateGeometryLayer(this.world,"rtgeolayer");
 	
-	if(poimode === undefined)
+	if(poimode === undefined || poimode===false) //clean up this...
 	{
 		this.poimode = false;
 	}
@@ -53,6 +54,14 @@ function RtPosModule(scene,wsaddress,poimode)
 	{
 		this.poimode = true;
 	}
+	
+	this.timer = 0;
+	this.ws = null;
+	
+	this.isConnected = false;
+	
+	this.followMode = false;
+	this.cam = -1;
 	
 }
 
@@ -65,25 +74,45 @@ function RtPosModule(scene,wsaddress,poimode)
  */
 RtPosModule.prototype.Init = function()
 {
+	//test if browser supports websockets...
+	if (!("WebSocket" in window))
+	{
+		alert("WebSockets not supported by this browser....");
+		return;
+	}
+
    //try to connect server
-   var ws = new WebSocket(this.wsaddress);
-   
-   // when data is comming from the server, this metod is called
-   var rtmod = this;
-   ws.onmessage = function (evt) {
-       rtmod.OnNewPosition(evt);
-   };
-
-   // when the connection is established, this method is called
-   ws.onopen = function () {
-       
-   };
-
-   // when the connection is closed, this method is called
-   ws.onclose = function () {
-      
-   } 
+	try{
+		
+		var ws = new WebSocket(this.wsaddress);
+		
+		// when data is comming from the server, this metod is called
+		var rtmod = this;
+		ws.onmessage = function (evt) {
+			rtmod.OnNewPosition(evt);
+		};
+	
+		// when the connection is established, this method is called
+		ws.onopen = function() {
+			rtmod.isConnected = true;
+			clearTimeout(rtmod.timer);
+		};
+	
+		// when the connection is closed, this method is called
+		ws.onclose = function ()
+		{
+			rtmod.isConnected = false;
+			clearTimeout(rtmod.timer);
+			//try to reconnect in 10 seconds
+			this.timer = setTimeout(function(){rtmod.Init()},10000);
+		};
+   }
+	catch(error)
+	{
+		alert("there was an error!!!");
+	}	
 }
+
 
 
 //------------------------------------------------------------------------------
@@ -116,8 +145,8 @@ RtPosModule.prototype.OnNewPosition = function(message)
    var lng=CHtoWGSlng(posjson.Y,posjson.X);
    var elv=posjson.Elv;
    var id=posjson.Id;
-	var qx = posjson.Qx;
-	var qy = posjson.Qy;
+	var qx = posjson.Qy; //note the change!!! according to example janosch...
+	var qy = posjson.Qx;
 	var qz = posjson.Qz;
 	var qw = posjson.Qw;
 	var msg = posjson.Message;
@@ -125,8 +154,6 @@ RtPosModule.prototype.OnNewPosition = function(message)
 	var quality = posjson.Quality;
 	
 	
-   
-
    var ogid = -1;
    for(var i=0;i<this.ids.length;i++)
    {
@@ -148,6 +175,10 @@ RtPosModule.prototype.OnNewPosition = function(message)
 		{
 			var quaternion =[qx,qy,qz,qw];
 			ogSetGeometryPositionWGS84Quat(ogid,lng,lat,elv,quaternion);
+			if(this.followMode)
+			{
+				this._setcamera(lng,lat,elv,quaternion);
+			}
 		}
 
    }
@@ -185,17 +216,45 @@ RtPosModule.prototype.OnNewPosition = function(message)
 			}
 			
 			//add it to the ids array
-			this.ids.push(idinfo);
-			
+			this.ids.push(idinfo);	
 		}
-
    }
-	
-	
-	
-	
+}
+
+
+RtPosModule.prototype._setcamera = function(lng,lat,elv,quats)
+{
+		
+	ogSetPosition(this.cam,lng,lat,elv);
+	ogSetOrientationFromQuaternion(this.cam, quats[0],quats[1],quats[2],quats[3]);
 	
 }
+
+//------------------------------------------------------------------------------
+/*
+ * @description sets the camera at the currently received location
+ * 
+ * 
+ */
+RtPosModule.prototype.FollowModeOn = function(cam,soldierid)
+{
+	this.followMode = true;
+	this.cam = cam;
+}
+
+
+RtPosModule.prototype.FollowModeOff = function(cam,soldierid)
+{
+	this.followMode = false;
+	this.cam = -1;
+}
+
+
+RtPosModule.prototype.GetConnectedIds = function()
+{
+	return this.ids;
+}
+
 
 //------------------------------------------------------------------------------
 /*
@@ -321,6 +380,7 @@ RtPosModule.prototype.CreateFrustum = function(left,right,bottom,top,near,far)
 	var frustumgeometry = [[{
 			"id"  :  "1",
          "Center"  :  [7.600771, 46.760578, 7000],
+			"VisibilityDistance" : 100000,
          "VertexSemantic"  :  "pc",
          "Vertices"  :  linevertices,
          "IndexSemantic"  :  "LINES",
@@ -328,6 +388,7 @@ RtPosModule.prototype.CreateFrustum = function(left,right,bottom,top,near,far)
 	},{
 			"id"  :  "1",
          "Center"  :  [7.600771, 46.760578, 7000],
+			"VisibilityDistance" : 100000,
          "VertexSemantic"  :  "pc",
          "Vertices"  :  vertices,
          "IndexSemantic"  :  "TRIANGLES",

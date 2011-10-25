@@ -8,7 +8,7 @@ Prokoll def:
 	msgcounter=0\n			-> message counter
 	version=0.0\n			-> protcol version
 [Location]\n
-	pos=3.12312,4.12421,7.21133\n   -> lv03 schweizer landeskoordinaten
+	pos=200000,600000,1000\n   -> lv03 schweizer landeskoordinaten
 	ori=x,y,z,w\n			-> quaternionen parameter
 	quality=0.123\n			-> position quality
 

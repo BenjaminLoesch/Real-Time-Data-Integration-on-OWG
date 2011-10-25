@@ -31,12 +31,18 @@
 <html lang="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<script type="text/javascript" src="openwebglobe_0.6.js"></script>
+<!--<script type="text/javascript" src="openwebglobe_0.6.js"></script>-->
+<script type="text/javascript" src="file:///D:/Projekte2011/WebGL/Developments/WebViewerMainFork/WebViewer/external/closure-library/closure/goog/base.js"></script>
+<script type="text/javascript" src="file:///D:/Projekte2011/WebGL/Developments/WebViewerMainFork/WebViewer/compiled/deps.js"></script>
+<script type="text/javascript">goog.require('owg.OpenWebGlobe');</script>
+
 <script type="text/javascript" src="rtposmodule.js"></script>
+<script type="text/javascript" src="pointcloudfilemanager.js"></script>
 <script type="text/javascript" src="wgs84_ch1903.js"></script>
 
 
 <script type="text/javascript">
+
 
 //------------------------------------------------------------------------------
 var bycicleLayer;
@@ -48,11 +54,25 @@ function OnRender(context)
    ogSetTextColor(context, 0,1,0);
 }
 
+function onkey(ctx,key)
+{
+	if(key==49)
+	{
+		rtmodule.FollowModeOn(cam);
+	}
+	if(key==50)
+	{
+		rtmodule.FollowModeOff();
+	}
+	
+}
+
 
 var ctx;
 var scene;
 var cam;
 var trackingpoi = -1;
+var rtmodule;
 
 //------------------------------------------------------------------------------
 
@@ -120,15 +140,17 @@ function main()
    bycicleLayer = ogCreatePOILayer(world,"byciclelayer");
 
    // reveive position data by websocket server.
-   rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample');
+   rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample',false);
 	rtmodule.Init();
   
 
-   var cam = ogGetActiveCamera(scene);
+   cam = ogGetActiveCamera(scene);
    //ogFlyToLookAtPosition(scene,7.600771,46.762485,500,300,0,-45,0);
    ogSetPosition(cam,7.600771,46.760578,7000)
 	
-	rtmodule.CreateFrustum(100,2,10,100);
+	ogSetKeyDownFunction(ctx,onkey);
+	
+	var pcfm = new PointCloudFileManager();
 }
 //------------------------------------------------------------------------------
    
