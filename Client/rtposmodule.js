@@ -75,7 +75,7 @@ function RtPosModule(scene,wsaddress,poimode)
 RtPosModule.prototype.Init = function()
 {
 	//test if browser supports websockets...
-	if (!("WebSocket" in window))
+	if (!("MozWebSocket" in window))
 	{
 		alert("WebSockets not supported by this browser....");
 		return;
@@ -84,7 +84,7 @@ RtPosModule.prototype.Init = function()
    //try to connect server
 	try{
 		
-		var ws = new WebSocket(this.wsaddress);
+		var ws = new MozWebSocket(this.wsaddress);
 		
 		// when data is comming from the server, this metod is called
 		var rtmod = this;

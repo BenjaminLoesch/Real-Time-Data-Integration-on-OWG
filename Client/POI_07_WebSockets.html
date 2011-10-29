@@ -31,13 +31,14 @@
 <html lang="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<!--<script type="text/javascript" src="openwebglobe_0.6.js"></script>-->
-<script type="text/javascript" src="file:///D:/Projekte2011/WebGL/Developments/WebViewerMainFork/WebViewer/external/closure-library/closure/goog/base.js"></script>
+<script type="text/javascript" src="openwebglobe_0.6.js"></script>
+<!--<script type="text/javascript" src="file:///D:/Projekte2011/WebGL/Developments/WebViewerMainFork/WebViewer/external/closure-library/closure/goog/base.js"></script>
 <script type="text/javascript" src="file:///D:/Projekte2011/WebGL/Developments/WebViewerMainFork/WebViewer/compiled/deps.js"></script>
-<script type="text/javascript">goog.require('owg.OpenWebGlobe');</script>
+<script type="text/javascript">goog.require('owg.OpenWebGlobe');</script>-->
 
 <script type="text/javascript" src="rtposmodule.js"></script>
 <script type="text/javascript" src="pointcloudfilemanager.js"></script>
+<script type="text/javascript" src="pcfile.js"></script>
 <script type="text/javascript" src="wgs84_ch1903.js"></script>
 
 
@@ -140,7 +141,8 @@ function main()
    bycicleLayer = ogCreatePOILayer(world,"byciclelayer");
 
    // reveive position data by websocket server.
-   rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample',false);
+  // rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample',false);
+  rtmodule = new RtPosModule(scene,'ws://10.218.9.21:4123/consoleappsample',false);
 	rtmodule.Init();
   
 
@@ -150,13 +152,15 @@ function main()
 	
 	ogSetKeyDownFunction(ctx,onkey);
 	
-	var pcfm = new PointCloudFileManager();
+	var pcfm = new PointCloudFileManager("pcdata",this.scene);
+	pcfm.Start();
 }
 //------------------------------------------------------------------------------
    
 </script>
 
 </head>
+
 <body onload="main()">
    <div style="text-align: center">
    <canvas id="canvas"></canvas>          
