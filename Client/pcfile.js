@@ -1,8 +1,38 @@
+/*******************************************************************************
+#      ____               __          __  _      _____ _       _               #
+#     / __ \              \ \        / / | |    / ____| |     | |              #
+#    | |  | |_ __   ___ _ __ \  /\  / /__| |__ | |  __| | ___ | |__   ___      #
+#    | |  | | '_ \ / _ \ '_ \ \/  \/ / _ \ '_ \| | |_ | |/ _ \| '_ \ / _ \     #
+#    | |__| | |_) |  __/ | | \  /\  /  __/ |_) | |__| | | (_) | |_) |  __/     #
+#     \____/| .__/ \___|_| |_|\/  \/ \___|_.__/ \_____|_|\___/|_.__/ \___|     #
+#           | |                                                                #
+#           |_|                 _____ _____  _  __                             #
+#                              / ____|  __ \| |/ /                             #
+#                             | (___ | |  | | ' /                              #
+#                              \___ \| |  | |  <                               #
+#                              ____) | |__| | . \                              #
+#                             |_____/|_____/|_|\_\                             #
+#                                                                              #
+#                              (c) 2010-2011 by                                #
+#           University of Applied Sciences Northwestern Switzerland            #
+#                     Institute of Geomatics Engineering                       #
+#                           martin.christen@fhnw.ch                            #
+********************************************************************************
+*     Licensed under MIT License. Read the file LICENSE for more information   *
+*******************************************************************************/
+
+/**
+ * @description Class representating a pointcloudfile downloads it and displays it on
+ * the globe.
+ * @param {String} url
+ * @param {number} scene
+ * @param {number} geometrylayer
+ */
 function PcFile(url,scene,geometrylayer)
 {
    this.scene = scene;
    this.url = url;
-
+   this.geometrylayer = geometrylayer;
    
    // init set-up json callback
    this.xmlHttpReq = new XMLHttpRequest();
@@ -15,12 +45,15 @@ function PcFile(url,scene,geometrylayer)
             me._parseFile(me.xmlHttpReq.responseText);
         }
     }
-   this.xmlHttpReq.send(null);
-   
-  
+   this.xmlHttpReq.send(null); 
 }
 
 
+//------------------------------------------------------------------------------
+/**
+*  @description parses the httprequest answer and creat a valid json file.
+*
+*/
 PcFile.prototype._parseFile = function(filecontent)
 {
    //create a json object
@@ -32,11 +65,11 @@ PcFile.prototype._parseFile = function(filecontent)
    //take the first line as center
    var lines = filecontent.split("\n");
    var centerlv03 = lines[0].split(" ");
-   var x = parseFloat(centerlv03[0]);
-   var y = parseFloat(centerlv03[1]);
+   var x = parseFloat(centerlv03[1]);
+   var y = parseFloat(centerlv03[0]);
    var h = parseFloat(centerlv03[2]);
    
-   pointspritejson["Center"] = [CHtoWGSlat(y,x),CHtoWGSlng(y,x),h];
+   pointspritejson["Center"] = [CHtoWGSlng(y,x),CHtoWGSlat(y,x),h];
    
    vertices = [];
    
@@ -44,25 +77,20 @@ PcFile.prototype._parseFile = function(filecontent)
    {
       var data = lines[i].split(" ");
       
-      vertices.push(data[0]-x); //subtract the center....
-      vertices.push(data[1]-y);
-      vertices.push(parseFloat(data[2]));
-      vertices.push(parseFloat(data[3]));
-      vertices.push(parseFloat(data[4]));
-      vertices.push(parseFloat(data[5]));
+      vertices.push(data[1]-x); //subtract the center....
+      vertices.push(data[0]-y);
+      vertices.push(parseFloat(data[2])-h);
+      vertices.push(parseFloat(data[3])/255);
+      vertices.push(parseFloat(data[4])/255);
+      vertices.push(parseFloat(data[5])/255);
+      vertices.push(1.0); //alpha value
    }
    pointspritejson["Vertices"] = vertices;
    
    
    //implement this....
-   ogCreatePointSpriteFromJson(geometrylayer,json);
+   ogCreateGeometry(this.geometrylayer,pointspritejson);
    var a=0;
+   var pos =  pointspritejson["Center"];
+   ogFlyToLookAtPosition(this.scene, pos[0], pos[1], pos[2],100);
 }
-
-/*{"id"  :  "1",
-"Center"  :  [7.600430,46.762335,573.846993],
-"Type"	: "pointcloud",
-"VertexSemantic"  :  "pc",
-"Vertices"  : [-9.057455,0.622725,-4.089594,0.003922,0.003922,0.003922,1.0,
-
-...*/

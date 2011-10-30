@@ -31,10 +31,10 @@
 <html lang="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<script type="text/javascript" src="openwebglobe_0.6.js"></script>
-<!--<script type="text/javascript" src="file:///D:/Projekte2011/WebGL/Developments/WebViewerMainFork/WebViewer/external/closure-library/closure/goog/base.js"></script>
-<script type="text/javascript" src="file:///D:/Projekte2011/WebGL/Developments/WebViewerMainFork/WebViewer/compiled/deps.js"></script>
-<script type="text/javascript">goog.require('owg.OpenWebGlobe');</script>-->
+<!--<script type="text/javascript" src="openwebglobe_0.6.js"></script>-->
+<script type="text/javascript" src="../../../WebViewerMainFork/WebViewer/external/closure-library/closure/goog/base.js"></script>
+<script type="text/javascript" src="../../../WebViewerMainFork/WebViewer/compiled/deps.js"></script>
+<script type="text/javascript">goog.require('owg.OpenWebGlobe');</script>
 
 <script type="text/javascript" src="rtposmodule.js"></script>
 <script type="text/javascript" src="pointcloudfilemanager.js"></script>
@@ -65,7 +65,10 @@ function onkey(ctx,key)
 	{
 		rtmodule.FollowModeOff();
 	}
-	
+	if(key==51)
+	{
+		//scogFlyTo()
+	}
 }
 
 
