@@ -65,21 +65,24 @@ PcFile.prototype._parseFile = function(filecontent)
    //take the first line as center
    var lines = filecontent.split("\n");
    var centerlv03 = lines[0].split(" ");
-   var x = parseFloat(centerlv03[1]);
-   var y = parseFloat(centerlv03[0]);
+   var x = parseFloat(centerlv03[0]);
+   var y = parseFloat(centerlv03[1]);
    var h = parseFloat(centerlv03[2]);
+   var x = 600000;
+   var y = 200000;
+   var h = 550;
    
-   pointspritejson["Center"] = [CHtoWGSlng(y,x),CHtoWGSlat(y,x),h];
+   pointspritejson["Center"] = [CHtoWGSlng(x,y),CHtoWGSlat(x,y),h];
    
-   vertices = [];
+   var vertices = [];
    
    for(var i=0;i<lines.length;i++)
    {
       var data = lines[i].split(" ");
       
-      vertices.push(data[1]-x); //subtract the center....
-      vertices.push(data[0]-y);
+      vertices.push(parseFloat(data[1])-y); //subtract the center....
       vertices.push(parseFloat(data[2])-h);
+      vertices.push(parseFloat(data[0])-x);
       vertices.push(parseFloat(data[3])/255);
       vertices.push(parseFloat(data[4])/255);
       vertices.push(parseFloat(data[5])/255);
