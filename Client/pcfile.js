@@ -33,6 +33,7 @@ function PcFile(url,scene,geometrylayer)
    this.scene = scene;
    this.url = url;
    this.geometrylayer = geometrylayer;
+   this.ogid = -1;
    
    // init set-up json callback
    this.xmlHttpReq = new XMLHttpRequest();
@@ -68,9 +69,9 @@ PcFile.prototype._parseFile = function(filecontent)
    var x = parseFloat(centerlv03[0]);
    var y = parseFloat(centerlv03[1]);
    var h = parseFloat(centerlv03[2]);
-   var x = 600000;
-   var y = 200000;
-   var h = 550;
+   var x = 612358;
+   var y = 179018;
+   var h = 520;
    
    pointspritejson["Center"] = [CHtoWGSlng(x,y),CHtoWGSlat(x,y),h];
    
@@ -92,8 +93,16 @@ PcFile.prototype._parseFile = function(filecontent)
    
    
    //implement this....
-   ogCreateGeometry(this.geometrylayer,pointspritejson);
+   this.ogid = ogCreateGeometry(this.geometrylayer,pointspritejson);
    var a=0;
    var pos =  pointspritejson["Center"];
-   ogFlyToLookAtPosition(this.scene, pos[0], pos[1], pos[2],100);
+   ogFlyToLookAtPosition(this.scene, pos[0], pos[1], pos[2],200);
 }
+
+
+PcFile.prototype.Destroy = function()
+{
+   //console.log("file gelöscht:"+this.url);
+   ogDestroyGeometry(this.ogid);
+}
+

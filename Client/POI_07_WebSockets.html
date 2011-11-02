@@ -55,6 +55,9 @@ function OnRender(context)
    ogSetTextColor(context, 0,1,0);
 }
 
+
+var view = -1;
+
 function onkey(ctx,key)
 {
 	if(key==49)
@@ -65,12 +68,55 @@ function onkey(ctx,key)
 	{
 		rtmodule.FollowModeOff();
 	}
-	if(key==51)
+	if(key==96)
 	{
-		//scogFlyTo()
+		pos = ogGetPosition(scene);
+		ori = ogGetOrientation(scene);
+		console.log(" "+pos.longitude+","+pos.latitude+","+pos.elevation+","+ori.yaw+","+ori.pitch+","+ori.roll);
 	}
+	//iterate trough all views
+	if(key == 39) //->
+	{
+		view += 1;
+		view %= 8;
+		switch(view)
+		{
+			case 0:	ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,0,-90,0);
+						break;
+			case 1:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,0,-45,0);
+						break;
+			case 2:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,90,-45,0);
+						break;
+			case 3:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,180,-45,0);
+						break;
+			case 4:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,270,-45,0);
+						break;
+			case 5:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,270,-20,0);
+						break;
+			case 6:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,0,-20,0);
+						break;
+			case 7:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,90,-20,0);
+						break;
+			case 8:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,180,-20,0);
+						break;
+		}
+	}
+	console.log(key);
 }
 
+
+function OnMouseDown(context, button, mx, my)
+{
+   // retrieve the scene attached to context:
+   var scene = ogGetScene(context);
+   
+   // call the pickglobe function, this gives the result in lng, lat, elv
+   var result = ogPickGlobe(scene, mx, my);
+   if (result[0])
+   {
+      console.log("pick result: lng=" + result[1] + ", lat=" + result[2] + ", elv=" + result[3]);  
+   }
+}
 
 var ctx;
 var scene;
@@ -112,6 +158,7 @@ function main()
    // (4) Set the "Render-Callback" function.
    // The callback function will be called everytime a frame is drawn.
    ogSetRenderFunction(ctx, OnRender);
+	ogSetMouseDownFunction(ctx,OnMouseDown);
    
    // (6) Set the key down callback function
    //ogSetKeyDownFunction(ctx, OnKeyDown);
@@ -144,8 +191,8 @@ function main()
    bycicleLayer = ogCreatePOILayer(world,"byciclelayer");
 
    // reveive position data by websocket server.
-   rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample',false);
-  //rtmodule = new RtPosModule(scene,'ws://10.218.9.21:4123/consoleappsample',false);
+     rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample',false);
+   //rtmodule = new RtPosModule(scene,'ws://10.218.9.129:4123/consoleappsample',false);
 	rtmodule.Init();
   
 
@@ -158,10 +205,10 @@ function main()
 	var pcfm = new PointCloudFileManager("pcdata",this.scene);
 	pcfm.Start();
 }
+
 //------------------------------------------------------------------------------
    
 </script>
-
 </head>
 
 <body onload="main()">

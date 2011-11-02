@@ -32,7 +32,6 @@ function PointCloudFileManager(folder,scene)
 {
    
    this.scene = scene;
-   this.loadedfiles = []; // Array of loaededfilenames.
    this.loadedpcfile = []; //Array of pcfile objects!
    
    this.timer = -1;
@@ -42,6 +41,9 @@ function PointCloudFileManager(folder,scene)
    this.geometrylayer = ogCreateGeometryLayer(world,"rtpoints");
    
    this.tick = 3000; //folder check interval
+   
+   this.folder = "./"+folder;
+   this.maxfiles = 30;
    
 }
 
@@ -64,7 +66,8 @@ PointCloudFileManager.prototype.CheckFolder = function()
 {
    this.xmlHttpReq = new XMLHttpRequest();
 
-   this.xmlHttpReq.open('POST', "readfolder.php", true);
+   var url = "readfolder.php?maxfiles="+this.maxfiles+"&folder="+this.folder;
+   this.xmlHttpReq.open('GET', url, true);
    var me = this;
    this.xmlHttpReq.onreadystatechange = function() {
         if (me.xmlHttpReq.readyState == 4)
@@ -73,7 +76,6 @@ PointCloudFileManager.prototype.CheckFolder = function()
         }
     }
    this.xmlHttpReq.send(null);
-   
 }
 
 //------------------------------------------------------------------------------
@@ -113,12 +115,14 @@ PointCloudFileManager.prototype.Stop = function()
  * @description parses the received answer from php call.
  *
  */
+/*
 PointCloudFileManager.prototype._parseFilenames = function(filenamestring)
 {
    var filesinfolder = filenamestring.split(",");
-   filesinfolder.splice(filesinfolder.length-1,1);
+   filesinfolder.splice(filesinfolder.length-1,1);//remove last ','
  
-
+   
+   
    //check if there is a new file available
    for(var i in filesinfolder)
    {
@@ -130,6 +134,7 @@ PointCloudFileManager.prototype._parseFilenames = function(filenamestring)
       if(file == loadedfile)
       {
          isAlreadyLoaded  = true;
+         this.loadedfiles[j].isInFolder = true;
       }
     }
     if(!isAlreadyLoaded)
@@ -137,9 +142,59 @@ PointCloudFileManager.prototype._parseFilenames = function(filenamestring)
       //new file received -> load file
       this.loadedfiles.push(file);
       this.loadedpcfile.push(new PcFile("pcdata/"+file,this.scene,this.geometrylayer));
+      this.loadedfiles[this.loadedfiles.length-1].isInFolder = true;
+      return;
     }
+     
    }
+
 }
+*/
 
+PointCloudFileManager.prototype._parseFilenames = function(filenamestring)
+{
+   var filesinfolder = filenamestring.split(",");
+   filesinfolder.splice(filesinfolder.length-1,1);//remove last ','
+   
+   //set all isinfolder flags to false...
+   for(var i=0;i<this.loadedpcfile.length;i++)
+   {
+      this.loadedpcfile[i].isinfolder = false;
+   }
+   
+   //go trough all loaded files and check if it is already loaded
+   for(var i=0; i<this.loadedpcfile.length;i++)
+   {
+      for(var j=0; j<filesinfolder.length;j++)
+      {
+         if(this.folder+"/"+filesinfolder[j]==this.loadedpcfile[i].url)
+         {
+            //file already loaded remove it from  the filesinfolder array
+            filesinfolder.splice(j,1);
+            this.loadedpcfile[i].isinfolder = true;
+            
+         }
+      }
+   }
+   
 
-
+   //if there is a file left in filesinfolder load it.
+   for(var i=0; i<filesinfolder.length;i++)
+   {
+      var f = new PcFile(this.folder+"/"+filesinfolder[i],this.scene,this.geometrylayer);
+      f.isinfolder = true;
+      this.loadedpcfile.push(f);
+   }
+   
+   
+   //remove all files wich aren't in the folder right now.
+   for(var i=0;i<this.loadedpcfile.length;i++)
+   {
+     if(!this.loadedpcfile[i].isinfolder)
+     {
+         this.loadedpcfile[i].Destroy();
+         this.loadedpcfile.splice(i,1);
+     }
+   }
+   
+}

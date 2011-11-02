@@ -153,6 +153,12 @@ RtPosModule.prototype.OnNewPosition = function(message)
 	var msgcount = posjson.MsgCount;
 	var quality = posjson.Quality;
 	
+	//check if message is complete
+	if((posjson.X == -1) || (posjson.Y == -1) || (posjson.Elv == -1) || posjson.Id=="")
+	{
+		//message not complete,
+		return;
+	}
 	
    var ogid = -1;
    for(var i=0;i<this.ids.length;i++)
@@ -170,6 +176,12 @@ RtPosModule.prototype.OnNewPosition = function(message)
 		{
 			//id is already known, so just change position
 			ogChangePOIPositionWGS84(ogid,lng,lat,elv);
+			if(this.followMode)
+			{
+				ogSetFlightDuration(this.scene,10);
+				ogFlyToLookAtPosition(this.scene,lng,lat,elv,100);
+				ogSetFlightDuration(this.scene,3000);
+			}
 		}
 		else
 		{
@@ -271,12 +283,19 @@ RtPosModule.prototype.CreateFrustum = function(left,right,bottom,top,near,far)
 {
 
 	//ToDo: Replace this...
-	left = -100;
+	/*left = -100;
 	right = 100;
 	bottom = -100;
 	top = 100;
 	znear = -200;
-	zfar = -1000;
+	zfar = -1000;*/
+	
+	left = -1;
+	right = 1;
+	bottom = -1;
+	top = 1;
+	znear = -2;
+	zfar = -10;
 	
 	//create 8 points for a cube
 	var p1 = new vec3(-1,-1,-1);
