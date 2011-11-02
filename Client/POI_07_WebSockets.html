@@ -31,10 +31,10 @@
 <html lang="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<!--<script type="text/javascript" src="openwebglobe_0.6.js"></script>-->
-<script type="text/javascript" src="../../../WebViewerMainFork/WebViewer/external/closure-library/closure/goog/base.js"></script>
+<script type="text/javascript" src="openwebglobe_0.6.js"></script>
+<!--<script type="text/javascript" src="../../../WebViewerMainFork/WebViewer/external/closure-library/closure/goog/base.js"></script>
 <script type="text/javascript" src="../../../WebViewerMainFork/WebViewer/compiled/deps.js"></script>
-<script type="text/javascript">goog.require('owg.OpenWebGlobe');</script>
+<script type="text/javascript">goog.require('owg.OpenWebGlobe');</script>-->
 
 <script type="text/javascript" src="rtposmodule.js"></script>
 <script type="text/javascript" src="pointcloudfilemanager.js"></script>
@@ -138,14 +138,14 @@ function main()
    // (3) Add an image and an elevation layer
    var imgSWISSTOPO = 
    {
-      url     : ["http://10.42.2.37/"],
+      url     : ["http://owgdemo/data/img"],
       layer   : "swissimage", 
       service : "owg"
    };
 	
 	var elvDHM =
 	{
-		url     : ["http://10.42.2.37/"],
+		url     : ["http://owgdemo/data/elv"],
       layer   : "DHM25",
       service : "owg"
 	}
