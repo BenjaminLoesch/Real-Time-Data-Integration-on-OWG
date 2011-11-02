@@ -191,8 +191,8 @@ function main()
    bycicleLayer = ogCreatePOILayer(world,"byciclelayer");
 
    // reveive position data by websocket server.
-     rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample',false);
-   //rtmodule = new RtPosModule(scene,'ws://10.218.9.129:4123/consoleappsample',false);
+   //  rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample',false);
+   rtmodule = new RtPosModule(scene,'ws://10.218.9.122:4123/consoleappsample',false);
 	rtmodule.Init();
   
 
