@@ -29,3 +29,9 @@ D:\Projekte2011\WebGL\Developments\RealTimeDataIntegration\Real-Time-Data-Integr
 D:\Projekte2011\WebGL\Developments\RealTimeDataIntegration\Real-Time-Data-Integration-on-OWG\Server\ConsoleApp\bin\Debug\Fleck.Samples.ConsoleApp.pdb
 D:\Projekte2011\WebGL\Developments\RealTimeDataIntegration\Real-Time-Data-Integration-on-OWG\Server\ConsoleApp\bin\Debug\Fleck.dll
 D:\Projekte2011\WebGL\Developments\RealTimeDataIntegration\Real-Time-Data-Integration-on-OWG\Server\ConsoleApp\bin\Debug\Fleck.pdb
+E:\Real-Time-Data-Integration-on-OWG\Server\ConsoleApp\obj\x86\Debug\Fleck.Samples.ConsoleApp.exe
+E:\Real-Time-Data-Integration-on-OWG\Server\ConsoleApp\obj\x86\Debug\Fleck.Samples.ConsoleApp.pdb
+E:\Real-Time-Data-Integration-on-OWG\Server\ConsoleApp\bin\Debug\Fleck.Samples.ConsoleApp.exe
+E:\Real-Time-Data-Integration-on-OWG\Server\ConsoleApp\bin\Debug\Fleck.Samples.ConsoleApp.pdb
+E:\Real-Time-Data-Integration-on-OWG\Server\ConsoleApp\bin\Debug\Fleck.pdb
+E:\Real-Time-Data-Integration-on-OWG\Server\ConsoleApp\obj\x86\Debug\ResolveAssemblyReference.cache
