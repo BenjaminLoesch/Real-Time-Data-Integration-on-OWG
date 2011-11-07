@@ -136,23 +136,23 @@ function main()
    var globe = ogCreateGlobe(ctx);
    
    // (3) Add an image and an elevation layer
-   var imgSWISSTOPO = 
+   var img = 
    {
       url     : ["http://owgdemo/data/img"],
-      layer   : "swissimage", 
-      service : "owg"
+      layer   : "World500", 
+      service : "i3d"
    };
 	
-	var elvDHM =
-	{
-		url     : ["http://owgdemo/data/elv"],
-      layer   : "DHM25",
-      service : "owg"
-	}
+   var elv =
+   {
+	url     : ["http://owgdemo/data/elv"],
+        layer   : "SRTM",
+        service : "i3d"
+   }
 
    
-	ogAddImageLayer(globe, imgSWISSTOPO);
-   ogAddElevationLayer(globe, elvDHM);
+   ogAddImageLayer(globe, img);
+   ogAddElevationLayer(globe, elv);
    
 
    // (4) Set the "Render-Callback" function.
@@ -191,8 +191,8 @@ function main()
    bycicleLayer = ogCreatePOILayer(world,"byciclelayer");
 
    // reveive position data by websocket server.
-  rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample',false);
-//   rtmodule = new RtPosModule(scene,'ws://10.218.9.122:4123/consoleappsample',false);
+    // rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample',false);
+    rtmodule = new RtPosModule(scene,'ws://10.218.9.22:4123/consoleappsample',false);
 	rtmodule.Init();
   
 

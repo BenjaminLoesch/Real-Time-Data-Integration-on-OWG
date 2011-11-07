@@ -25,27 +25,33 @@ namespace UdpWSBridge.ConsoleApp
         public void init()
         {           
             var server = new WebSocketServer("ws://"+this.wsip+":"+this.wsp);
-            
-            server.Start(socket =>
-                {
-                    socket.OnOpen = () =>
-                        {
-                            Console.WriteLine(DateTime.Now+" [WebSocketServer] Client connected!");
-                            allSockets.Add(socket);
-                        };
-                    socket.OnClose = () =>
-                        {
-                            Console.WriteLine(DateTime.Now + " [WebSocketServer] Client disconnected!");
-                            allSockets.Remove(socket);
-                        };
-                    socket.OnMessage = message =>
-                        {
-                            Console.WriteLine(DateTime.Now + " [WebSocketServer] received message: " + message);
-                        };
+            try
+            {
+                server.Start(socket =>
+                    {
+                        socket.OnOpen = () =>
+                            {
+                                Console.WriteLine(DateTime.Now + " [WebSocketServer] Client connected!");
+                                allSockets.Add(socket);
+                            };
+                        socket.OnClose = () =>
+                            {
+                                Console.WriteLine(DateTime.Now + " [WebSocketServer] Client disconnected!");
+                                allSockets.Remove(socket);
+                            };
+                        socket.OnMessage = message =>
+                            {
+                                Console.WriteLine(DateTime.Now + " [WebSocketServer] received message: " + message);
+                            };
 
-                });
-            Console.WriteLine(DateTime.Now + " [WebSocketServer] server started "+this.wsip.ToString()+":"+this.wsp);
-
+                    });
+                Console.WriteLine(DateTime.Now + " [WebSocketServer] server started " + this.wsip.ToString() + ":" + this.wsp);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Console.ReadLine();
+            }
             /*
             string msg;
             int dir=1;
@@ -78,10 +84,20 @@ namespace UdpWSBridge.ConsoleApp
 
             foreach (var socket in allSockets.ToList())
             {
-                socket.Send(msg); //broadcasting
+                try
+                {
+                    socket.Send(msg); //broadcasting
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.ReadLine();
+                }
             }
             Console.WriteLine(DateTime.Now + " [WebSocketServer] sent message broadcast: \n" + msg+"\n\n");
 
         }
     }
 }
+//System.AggregateException was unhandled
+//Message: A Task's exception(s) were not observed either by Waiting on the Task or accessing its Exception property. As a result, the unobserved exception was rethrown by the finalizer thread.

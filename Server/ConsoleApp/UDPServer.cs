@@ -60,12 +60,20 @@ namespace UdpWSBridge.ConsoleApp
             //string m = "\x00\x01\x00p[Message]\nsender=eth1\ntimestamp=231.221\n[Location]\npos=3.12312,4.12421,7.21133\nori=355,90,0\nname=ufdhfdhfd";
             while(true)
             {
-               data = new byte[1024];
-               recv = newsock.ReceiveFrom(data, ref Remote);
-             
-               message = Encoding.ASCII.GetString(data, 0, recv);
-               Console.WriteLine(DateTime.Now+" [UdpServer] Message received: \n"+message+"\n\n");
-               this.parseMessage(message);
+                try
+                {
+                    data = new byte[1024];
+                    recv = newsock.ReceiveFrom(data, ref Remote);
+
+                    message = Encoding.ASCII.GetString(data, 0, recv);
+                    Console.WriteLine(DateTime.Now + " [UdpServer] Message received: \n" + message + "\n\n");
+                    this.parseMessage(message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.ReadLine();
+                }
 
             }
         }
