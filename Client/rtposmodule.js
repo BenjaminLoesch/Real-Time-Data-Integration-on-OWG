@@ -63,6 +63,9 @@ function RtPosModule(scene,wsaddress,poimode)
 	this.followMode = false;
 	this.cam = -1;
 	
+	this.oninitcallback = null;
+	this.onclosecallback = null;
+	
 }
 
 //------------------------------------------------------------------------------
@@ -72,18 +75,26 @@ function RtPosModule(scene,wsaddress,poimode)
  * 
  *
  */
-RtPosModule.prototype.Init = function()
+RtPosModule.prototype.Init = function(oninitcallback,onclosecallback)
 {
+	if(oninitcallback != null && onclosecallback != null)
+	{
+		this.oninitcallback = oninitcallback;
+		this.onclosecallback = onclosecallback;
+	}
+
+	
 	//test if browser supports websockets...
 	if (!("WebSocket" in window) && !("MozWebSocket" in window))
 	{
 		alert("WebSockets not supported by this browser....");
 		return;
 	}
-
+	
+	var ws;
    //try to connect server
 	try{
-               var ws;
+      
 		if("WebSocket" in window)
                 {
                   ws = new WebSocket(this.wsaddress);
@@ -103,6 +114,8 @@ RtPosModule.prototype.Init = function()
 		ws.onopen = function() {
 			rtmod.isConnected = true;
 			clearTimeout(rtmod.timer);
+			rtmod.oninitcallback();
+			
 		};
 	
 		// when the connection is closed, this method is called
@@ -112,30 +125,22 @@ RtPosModule.prototype.Init = function()
 			clearTimeout(rtmod.timer);
 			//try to reconnect in 10 seconds
 			this.timer = setTimeout(function(){rtmod.Init()},10000);
+			rtmod.onclosecallback();
+		};
+		
+		ws.onerror = function()
+		{
+			alert("an error occured rtposmodule line: 133");
 		};
    }
 	catch(error)
 	{
-		alert("there was an error!!!");
+		alert("an error occured rtposmodule line: 138");
 	}	
 }
 
 
 
-//------------------------------------------------------------------------------
-RtPosModule.prototype.Start = function()
-{
-   //ToDo
-   
-}
-
-
-//------------------------------------------------------------------------------
-RtPosModule.prototype.Stop = function()
-{
-   
-   //ToDo
-}
 
 //------------------------------------------------------------------------------
 /*
@@ -240,6 +245,31 @@ RtPosModule.prototype.OnNewPosition = function(message)
    }
 }
 
+RtPosModule.prototype.Show = function(id)
+{
+	for(var i=0;i<this.ids.length;i++)
+   {
+      if(this.ids[i].id == id)
+      {
+         ogid = this.ids[i].ogid;
+			ogShowGeometry(ogid);
+         
+      }
+   }
+}
+
+RtPosModule.prototype.Hide = function(id)
+{
+	for(var i=0;i<this.ids.length;i++)
+   {
+      if(this.ids[i].id == id)
+      {
+         ogid = this.ids[i].ogid;
+			ogHideGeometry(ogid); 
+      }
+   }
+}
+
 
 RtPosModule.prototype._setcamera = function(lng,lat,elv,quats)
 {
@@ -255,17 +285,18 @@ RtPosModule.prototype._setcamera = function(lng,lat,elv,quats)
  * 
  * 
  */
-RtPosModule.prototype.FollowModeOn = function(cam,soldierid)
+RtPosModule.prototype.FollowModeOn = function(soldierid)
 {
+	this.cam = ogGetActiveCamera(this.scene);
 	this.followMode = true;
-	this.cam = cam;
+	
 }
 
 
-RtPosModule.prototype.FollowModeOff = function(cam,soldierid)
+RtPosModule.prototype.FollowModeOff = function(soldierid)
 {
 	this.followMode = false;
-	this.cam = -1;
+	//this.cam = -1;
 }
 
 

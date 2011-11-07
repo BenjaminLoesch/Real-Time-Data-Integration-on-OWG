@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="design/styles.css">
+
+<!-- jQuery imports -->
+ <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+  
+
+
+<script type="text/javascript" src="openwebglobe_0.6.js"></script>
+<!--<script type="text/javascript" src="../../../WebViewerMainFork/WebViewer/external/closure-library/closure/goog/base.js"></script>
+<script type="text/javascript" src="../../../WebViewerMainFork/WebViewer/compiled/deps.js"></script>
+<script type="text/javascript">goog.require('owg.OpenWebGlobe');</script>-->
+
+
+<script type="text/javascript" src="rtposmodule.js"></script>
+<script type="text/javascript" src="pointcloudfilemanager.js"></script>
+<script type="text/javascript" src="pcfile.js"></script>
+<script type="text/javascript" src="wgs84_ch1903.js"></script>
+<script type="text/javascript" src="viewpanel.js"></script>
+<script type="text/javascript" src="pointcloudpanel.js"></script>
+<script type="text/javascript" src="realtimepanel.js"></script>
+<script type="text/javascript" src="guihelpers.js"></script>
+<script type="text/javascript" src="rtpointcloudpanel.js"></script>
+
+<script type="text/javascript">
+
+//--------------- Global Vars --------------------------------------------------
+//------------------------------------------------------------------------------
+var ctx;
+var scene;
+var globe;
+var world;
+var cam;
+var rtmodule;
+var viewiterator = -1;
+
+//--------------- Main ---------------------------------------------------------
+//------------------------------------------------------------------------------
+function main()
+{
+   //og Settings
+   ctx = ogCreateContextFromCanvas("canvas", true);
+	
+	
+   globe = ogCreateGlobe(ctx);
+   scene = ogGetScene(ctx);
+   world = ogGetWorld(scene);
+   cam = ogGetActiveCamera(scene);
+   
+   ogSetBackgroundColor(ctx, 0.2,0.2,0.7,1);
+	ogSetCanvasSizeOffset(scene,16,88);
+
+/*
+   //set up image data source
+   var imgSWISSTOPO = 
+   {
+      url     : ["http://owgdemo/data/img"],
+      layer   : "swissimage", 
+      service : "owg"
+   };
+	
+	var elvDHM =
+	{
+		url     : ["http://owgdemo/data/elv"],
+      layer   : "DHM25",
+      service : "owg"
+	}
+
+	ogAddImageLayer(globe, imgSWISSTOPO);
+   ogAddElevationLayer(globe, elvDHM);
+*/
+
+             var imgBlueMarble500 = 
+            {
+               url     : ["http://www.openwebglobe.org/data/img"],
+               layer   : "World500",
+               service : "i3d"
+            };
+            
+            var imgLandsat_CH = 
+            {
+               url     : ["http://www.openwebglobe.org/data/img"],
+               layer   : "LandsatCH",
+               /*transparency : 0.5,*/
+               service : "i3d"
+            };
+            
+            var elvSRTM_CH = 
+            {
+               url     : ["http://www.openwebglobe.org/data/elv"],
+               layer   : "SRTM",
+               service : "i3d"
+            };
+            
+            ogAddImageLayer(globe, imgBlueMarble500);
+            ogAddImageLayer(globe, imgLandsat_CH);
+            ogAddElevationLayer(globe, elvSRTM_CH);
+
+   // event callbacks
+   ogSetRenderFunction(ctx, OnRender);
+	ogSetMouseDownFunction(ctx,OnMouseDown);
+   ogSetKeyDownFunction(ctx,onkey);
+ 
+
+  
+   //Fly to start position
+   ogSetPosition(cam,7.600771,46.760578,7000)
+	
+	
+	//set up panels
+	createViewPanel(document.getElementById('divViewOptions'));
+	createPointCloudPanel(document.getElementById('divPointCloudOptions'));
+	createRealTimePanel(document.getElementById('divRealTimeDataOptions'));
+	createRtPointCloudPanel(document.getElementById('divRealTimePcOptions'));
+}
+
+
+//-------- Event Callback Functions --------------------------------------------
+//------------------------------------------------------------------------------
+function OnRender(context)
+{  
+   ogSetTextColor(context, 0,1,0);
+}
+
+
+
+
+function onkey(ctx,key)
+{
+	if(key==49)
+	{
+		rtmodule.FollowModeOn(cam);
+	}
+	if(key==50)
+	{
+		rtmodule.FollowModeOff();
+	}
+	if(key==96)
+	{
+		pos = ogGetPosition(scene);
+		ori = ogGetOrientation(scene);
+		console.log(" "+pos.longitude+","+pos.latitude+","+pos.elevation+","+ori.yaw+","+ori.pitch+","+ori.roll);
+	}
+	//iterate trough all views
+	if(key == 39) //->
+	{
+		view += 1;
+		view %= 8;
+		switch(viewiterator)
+		{
+			case 0:	ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,0,-90,0);
+						break;
+			case 1:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,0,-45,0);
+						break;
+			case 2:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,90,-45,0);
+						break;
+			case 3:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,180,-45,0);
+						break;
+			case 4:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,270,-45,0);
+						break;
+			case 5:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,270,-20,0);
+						break;
+			case 6:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,0,-20,0);
+						break;
+			case 7:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,90,-20,0);
+						break;
+			case 8:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,180,-20,0);
+						break;
+		}
+	}
+	console.log(key);
+}
+
+
+function OnMouseDown(context, button, mx, my)
+{
+   // retrieve the scene attached to context:
+   var scene = ogGetScene(context);
+   
+   // call the pickglobe function, this gives the result in lng, lat, elv
+   var result = ogPickGlobe(scene, mx, my);
+   if (result[0])
+   {
+      console.log("pick result: lng=" + result[1] + ", lat=" + result[2] + ", elv=" + result[3]);  
+   }
+}
+
+//------------------------------------------------------------------------------
+   
+</script>
+</head>
+<body onload="main()">
+	
+   <div id="divHeader">
+		<div id="divLogoArmasuisse"></div>
+		<div id="divLogoAll"></div>
+	</div>
+	<div id="divcanvas">
+		<canvas id="canvas"></canvas>
+	</div>
+   <div id="divViewOptions"></div>
+   <div id="divPointCloudOptions"></div>
+   <div id="divRealTimeDataOptions"></div>
+	<div id="divRealTimePcOptions"></div>
+   <div id="divConfigOptions"></div>
+	
+</body>
+</html>

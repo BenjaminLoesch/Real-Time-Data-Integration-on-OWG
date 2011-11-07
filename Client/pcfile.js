@@ -36,17 +36,23 @@ function PcFile(url,scene,geometrylayer)
    this.ogid = -1;
    
    // init set-up json callback
-   this.xmlHttpReq = new XMLHttpRequest();
-
-   this.xmlHttpReq.open('POST', url, true);
-   var me = this;
-   this.xmlHttpReq.onreadystatechange = function() {
-        if (me.xmlHttpReq.readyState == 4)
-        {
-            me._parseFile(me.xmlHttpReq.responseText);
-        }
-    }
-   this.xmlHttpReq.send(null); 
+   try
+   {
+      this.xmlHttpReq = new XMLHttpRequest();
+   
+      this.xmlHttpReq.open('POST', url, true);
+      var me = this;
+      this.xmlHttpReq.onreadystatechange = function() {
+         if (me.xmlHttpReq.readyState == 4)
+         {
+               me._parseFile(me.xmlHttpReq.responseText);
+         }
+      }
+      this.xmlHttpReq.send(null);
+   }catch(Exception)
+   {
+      console.log("error downloading rt-pointcloud file");
+   }
 }
 
 

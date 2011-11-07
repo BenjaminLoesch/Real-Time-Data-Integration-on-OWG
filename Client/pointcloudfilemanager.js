@@ -43,7 +43,7 @@ function PointCloudFileManager(folder,scene)
    this.tick = 3000; //folder check interval
    
    this.folder = "./"+folder;
-   this.maxfiles = 30;
+   this.maxfiles = 2;
    
 }
 
@@ -86,6 +86,10 @@ PointCloudFileManager.prototype.CheckFolder = function()
  */
 PointCloudFileManager.prototype.Start = function(tick)
 {
+   if(this.timer>0)
+   {
+      clearInterval(this.timer);
+   } 
    if(tick!=null)
    {
       this.tick = tick;
@@ -197,4 +201,24 @@ PointCloudFileManager.prototype._parseFilenames = function(filenamestring)
      }
    }
    
+}
+
+
+PointCloudFileManager.prototype.HidePointCloud = function()
+{
+   for(var i=0; i < this.loadedpcfile.length;i++)
+   {
+      ogHideGeometry(this.loadedpcfile[i].ogid);   
+   }
+   this.Stop();
+}
+
+PointCloudFileManager.prototype.ShowPointCloud = function()
+{
+   for(var i=0; i < this.loadedpcfile.length;i++)
+   {
+      ogShowGeometry(this.loadedpcfile[i].ogid);
+   }
+   this.Start();
+ 
 }
