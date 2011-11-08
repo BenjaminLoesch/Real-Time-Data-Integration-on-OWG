@@ -77,7 +77,7 @@ PcFile.prototype._parseFile = function(filecontent)
    var h = parseFloat(centerlv03[2]);
    var x = 612358;
    var y = 179018;
-   var h = 520;
+   var h = 560;
    
    pointspritejson["Center"] = [CHtoWGSlng(x,y),CHtoWGSlat(x,y),h];
    
@@ -87,9 +87,9 @@ PcFile.prototype._parseFile = function(filecontent)
    {
       var data = lines[i].split(" ");
       
-      vertices.push(parseFloat(data[1])-y); //subtract the center....
+      vertices.push(parseFloat(data[0])-x); //subtract the center....
+      vertices.push(parseFloat(data[1])-y);
       vertices.push(parseFloat(data[2])-h);
-      vertices.push(parseFloat(data[0])-x);
       vertices.push(parseFloat(data[3])/255);
       vertices.push(parseFloat(data[4])/255);
       vertices.push(parseFloat(data[5])/255);
