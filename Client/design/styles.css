@@ -73,6 +73,17 @@ body
    background-color : #ffffff;
 }
 
+#divTimeDisplay
+{
+    background-color: #FFFFFF;
+    font-weight: bold;
+    height: 10px;
+    position: absolute;
+    right: -20px;
+    width: 100px;
+    top: 56px
+}
+
 .settingtable
 {
    font-size : 10pt;

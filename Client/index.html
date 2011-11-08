@@ -120,8 +120,26 @@ function main()
 	createRtPointCloudPanel(document.getElementById('divRealTimePcOptions'));
 	createRealTimePanel(document.getElementById('divRealTimeDataOptions'));
 	
+	setInterval("settime()", 1000);
 }
 
+
+//------- Show the time --------------------------------------------------------
+function settime () {
+  var curtime = new Date();
+  var curhour = curtime.getHours();
+  var curmin = curtime.getMinutes();
+  var cursec = curtime.getSeconds();
+  var time = "";
+ 
+  
+  time = (curhour) + ":" +
+         (curmin < 10 ? "0" : "") + curmin + ":" +
+         (cursec < 10 ? "0" : "") + cursec + " ";
+ 
+  var timepanel = document.getElementById("divTimeDisplay");
+  timepanel.innerHTML = time;
+}
 
 //-------- Event Callback Functions --------------------------------------------
 //------------------------------------------------------------------------------
@@ -202,6 +220,7 @@ function OnMouseDown(context, button, mx, my)
    <div id="divHeader">
 		<div id="divLogoArmasuisse"></div>
 		<div id="divLogoAll"></div>
+		<div id="divTimeDisplay"></div>
 	</div>
 	<div id="divcanvas">
 		<canvas id="canvas"></canvas>
@@ -211,6 +230,7 @@ function OnMouseDown(context, button, mx, my)
    <div id="divRealTimeDataOptions"></div>
 	<div id="divRealTimePcOptions"></div>
    <div id="divConfigOptions"></div>
+	<div id="divP"
 	
 </body>
 </html>

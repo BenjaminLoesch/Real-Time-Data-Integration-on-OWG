@@ -23,12 +23,14 @@ function createRealTimePanel(divPointCloudPanel)
       jQuery(scoutonoff1).buttonset("disable");
       jQuery(scout1follow).button("disable");
       
+      var quality = createQualityIndicator("ethquality");
+      
       
       
       //--- create the table ---------------------------------------------------
       //prepared for 3
       var elements = [];
-      elements[0] = ["ETH 1",scoutonoff1,scout1follow];
+      elements[0] = ["ETH 1",scoutonoff1,scout1follow,quality];
       
       var table = createSettingTable("realtimesettings","Localisation Settings",elements);
       divPointCloudPanel.appendChild(table);

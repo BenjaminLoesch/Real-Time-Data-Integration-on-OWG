@@ -67,11 +67,13 @@ function createToogleButton(name,cbon,cboff,label)
       {
          cboff();
          button.active = false;
+         jQuery(button).toggleClass('ui-state-focus',false);
       }
       else
       {
          cbon();
          button.active = true;
+         jQuery(button).toggleClass('ui-state-focus',true);
       }
                         
       });
@@ -118,6 +120,36 @@ function createSettingTable(name,headerstring,elements)
       }
     
       return table;
+}
+
+
+//------------------------------------------------------------------------------
+function createQualityMessageIndicator(name)
+{
+   var div = document.createElement('div');
+   div.id = name;
+   
+   
+   var qualitydiv = document.createElement('div');
+   qualitydiv.id = name+"_qualitydiv";
+   qualitydiv.style.width = '40px';
+   qualitydiv.style.heigth = '10px';
+   
+   var textnode = document.createTextNode('message');
+   
+   var t = createSettingTable("ETH 1","Position Quality",qualitydiv,"Message",textnode);
+   
+   div.appendChild(t);
+   
+   
+   
+   
+   
+   div.style.fontSize = '10%';
+   div.style.width = '400px';
+   div.style.height = '10px';
+   
+   return div;
 }
 
 
