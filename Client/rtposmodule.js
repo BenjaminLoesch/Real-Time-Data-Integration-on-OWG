@@ -128,9 +128,9 @@ RtPosModule.prototype.Init = function(oninitcallback,onclosecallback)
 			rtmod.onclosecallback();
 		};
 		
-		ws.onerror = function()
+		ws.onerror = function(error)
 		{
-			alert("an error occured rtposmodule line: 133");
+			console.log("WebSocketServer not found: "+error);
 		};
    }
 	catch(error)
