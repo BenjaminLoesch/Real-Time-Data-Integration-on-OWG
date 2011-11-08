@@ -111,4 +111,3 @@ PcFile.prototype.Destroy = function()
    //console.log("file gelöscht:"+this.url);
    ogDestroyGeometry(this.ogid);
 }
-

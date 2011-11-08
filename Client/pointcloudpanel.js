@@ -10,7 +10,7 @@ function createPointCloudPanel(divPointCloudPanel)
    // ----- load the building --------------------------------------------------
    var  buildingbutton = createOnOffElement("building",true,cbon,cboff);
    var pcoptions = { "id"               :  "1",
-                     "Center"           :  [7.637986,47.533279,681.261592],
+                     "Center"           :  [7.6383416688350052,47.53326882083595,0],
                      "VertexSemantic"   :  "pc",
                      "PointUrl"         :  "buildingpc/building.xyz",
                      "NumberOfPoints"   :  70000000,

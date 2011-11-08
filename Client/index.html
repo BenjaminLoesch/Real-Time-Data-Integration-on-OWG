@@ -77,31 +77,21 @@ function main()
    ogAddElevationLayer(globe, elvDHM);
 */
 
-             var imgBlueMarble500 = 
-            {
-               url     : ["http://www.openwebglobe.org/data/img"],
-               layer   : "World500",
-               service : "i3d"
-            };
-            
-            var imgLandsat_CH = 
-            {
-               url     : ["http://www.openwebglobe.org/data/img"],
-               layer   : "LandsatCH",
-               /*transparency : 0.5,*/
-               service : "i3d"
-            };
-            
-            var elvSRTM_CH = 
-            {
-               url     : ["http://www.openwebglobe.org/data/elv"],
-               layer   : "SRTM",
-               service : "i3d"
-            };
-            
-            ogAddImageLayer(globe, imgBlueMarble500);
-            ogAddImageLayer(globe, imgLandsat_CH);
-            ogAddElevationLayer(globe, elvSRTM_CH);
+			ogAddImageLayer(globe, {
+				url: ["http://owgdemo/data"],
+				layer: "bluemarble",
+				service: "owg"
+			});
+			ogAddImageLayer(globe, {
+				url: ["http://owgdemo/data"],
+				layer: "swissimage",
+				service: "owg"
+			});
+			ogAddElevationLayer(globe, {
+				url: ["http://owgdemo/data"],
+				layer: "DHM25",
+				service: "owg"
+			});
 
    // event callbacks
    ogSetRenderFunction(ctx, OnRender);
