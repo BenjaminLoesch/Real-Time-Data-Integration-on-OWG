@@ -43,9 +43,8 @@ function flyto(viewnumber)
 						break;
 			case 7:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,90,-20,0);
 						break;
-			case 8:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,180,-20,0);
+			case 8:  ogFlyTo(scene,7.600478649139404,46.76235580444336,15000000,0,-90,0);
 						break;
-			case 9:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,2000,0,-90,0);
-						break;
+			
 		}
 }

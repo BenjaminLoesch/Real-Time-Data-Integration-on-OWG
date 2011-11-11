@@ -42,8 +42,8 @@ function PointCloudFileManager(folder,scene)
    
    this.tick = 3000; //folder check interval
    
-   this.folder = "./"+folder;
-   this.maxfiles = 2;
+   this.folder = folder;
+   this.maxfiles = 20;
    
 }
 
@@ -171,7 +171,7 @@ PointCloudFileManager.prototype._parseFilenames = function(filenamestring)
    {
       for(var j=0; j<filesinfolder.length;j++)
       {
-         if(this.folder+"/"+filesinfolder[j]==this.loadedpcfile[i].url)
+         if("http://owgdemo/share/"+filesinfolder[j]==this.loadedpcfile[i].url)
          {
             //file already loaded remove it from  the filesinfolder array
             filesinfolder.splice(j,1);
@@ -185,7 +185,7 @@ PointCloudFileManager.prototype._parseFilenames = function(filenamestring)
    //if there is a file left in filesinfolder load it.
    for(var i=0; i<filesinfolder.length;i++)
    {
-      var f = new PcFile(this.folder+"/"+filesinfolder[i],this.scene,this.geometrylayer);
+      var f = new PcFile("http://owgdemo/share/"+filesinfolder[i],this.scene,this.geometrylayer);
       f.isinfolder = true;
       this.loadedpcfile.push(f);
    }

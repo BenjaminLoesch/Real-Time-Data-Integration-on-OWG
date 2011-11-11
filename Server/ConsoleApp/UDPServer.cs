@@ -57,7 +57,7 @@ namespace UdpWSBridge.ConsoleApp
 
 
             Console.WriteLine(DateTime.Now + " [UdpServer] server started on: " + this.udpip+":"+this.udpp);
-            //string m = "\x00\x01\x00p[Message]\nsender=eth1\ntimestamp=231.221\n[Location]\npos=3.12312,4.12421,7.21133\nori=355,90,0\nname=ufdhfdhfd";
+            //string m = "[Message]\nsender=eth1\ntimestamp=231.221\n[Location]\npos=3.12312,4.12421,7.21133\nori=355,90,0\nname=ufdhfdhfd";
             while(true)
             {
                 try

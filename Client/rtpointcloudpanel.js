@@ -1,7 +1,7 @@
 function createRtPointCloudPanel(div)
 {
    // instanciate PointCloudFile Manager
-   var pcfm = new PointCloudFileManager("pcdata",this.scene);
+   var pcfm = new PointCloudFileManager("N:",this.scene);
 	
    
    var cbon = function(){
