@@ -115,7 +115,16 @@ namespace UdpWSBridge.ConsoleApp
                                 case "version": posdata.Version = float.Parse(c[1]);
                                     break;
 
-                                case "message": posdata.Message = c[1];
+                                case "message":
+                                    if (c.Length > 1)
+                                    {
+                                        posdata.Message = c[1];
+                                    }
+                                    else
+                                    {
+                                        posdata.Message = "";
+                                    }
+
                                     break;
 
                                 default:

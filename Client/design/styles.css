@@ -48,7 +48,7 @@ body
    position :  absolute;
    left : 0px;
    top : 420px;
-   width : 260px;
+   width : 760px;
    height : 100px;
    background-color : #ffffff;
 }
@@ -82,6 +82,17 @@ body
     right: -20px;
     width: 100px;
     top: 56px
+}
+
+.soldiermessages
+{
+    background-color: #FFFFFF;
+    font-weight: bold;
+    height: 100px;
+    position: absolute;
+    right: 20px;
+    width: 800px;
+    bottom: 10px;
 }
 
 .settingtable

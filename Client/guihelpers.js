@@ -124,32 +124,83 @@ function createSettingTable(name,headerstring,elements)
 
 
 //------------------------------------------------------------------------------
-function createQualityMessageIndicator(name)
+function createQualityIndicator(name)
 {
    var div = document.createElement('div');
    div.id = name;
-   
-   
-   var qualitydiv = document.createElement('div');
-   qualitydiv.id = name+"_qualitydiv";
-   qualitydiv.style.width = '40px';
-   qualitydiv.style.heigth = '10px';
-   
-   var textnode = document.createTextNode('message');
-   
-   var t = createSettingTable("ETH 1","Position Quality",qualitydiv,"Message",textnode);
-   
-   div.appendChild(t);
-   
-   
-   
-   
-   
-   div.style.fontSize = '10%';
-   div.style.width = '400px';
+
+   div.style.fontSize = '60%';
+   div.style.width = '80px';
    div.style.height = '10px';
+   div.style.backgroundColor = '#ffffff';
+   div.style.border = 'solid';
+   div.style.borderWidth = '1px';
+   div.style.zIndex = '1';
+
+
+   var divIndicator = document.createElement('div');
+   divIndicator.id = name+"indicator";
+   divIndicator.style.width = '40px';
+   divIndicator.style.height = '10px';
+   divIndicator.style.backgroundColor = '#ff0000';
+   divIndicator.style.zIndex = '2';
+   divIndicator.style.position = 'absolute';
+   div.appendChild(divIndicator);
+ 
+   var divLabel = document.createElement('div');
+   divLabel.innerHTML = ' Position Quality';
+   //divLabel.style.textAlign = 'center';
+   divLabel.style.width = '80px';
+   divLabel.style.height = '10px';
+   divLabel.style.zIndex = '3';
+   divLabel.style.position='absolute';
+   divLabel.style.left = '10px';
+   divLabel.style.top = '0px';
+   divIndicator.appendChild(divLabel);
    
    return div;
 }
+
+function updateQualityIndicator(soldierid,quality)
+{
+   
+   var div = document.getElementById(soldierid+"qualityindicator");
+   
+   if(quality<0.3)
+   {
+      div.style.backgroundColor = '#ff0000';
+   }
+   else if (quality>0.3 && quality<0.6)
+   {
+      div.style.backgroundColor = '#ff9f00';
+   }
+   else
+   {
+      div.style.backgroundColor = '#54ff00';
+   }
+   div.style.width = quality*80+'px';
+}
+
+
+
+//------------------------------------------------------------------------------
+function createMessageNode(name)
+{
+   var div = document.createElement('div');
+   div.id = name;
+   div.style.backgroundColor='#ff000';
+   div.innerHTML = "Message: ";
+   
+   return div;  
+}
+
+//------------------------------------------------------------------------------
+function updateMessageNode(name,message)
+{
+   var div = document.getElementById(name+"message");
+   div.innerHTML = message;
+   
+}
+
 
 

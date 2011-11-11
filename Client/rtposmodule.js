@@ -63,6 +63,9 @@ function RtPosModule(scene,wsaddress,poimode)
 	this.followMode = false;
 	this.cam = -1;
 	
+	this.thirdMan = false;
+	this.activeId = ""; //the id of wich the follow mode or third man view is active
+	
 	this.oninitcallback = null;
 	this.onclosecallback = null;
 	
@@ -165,6 +168,7 @@ RtPosModule.prototype.OnNewPosition = function(message)
 	var msgcount = posjson.MsgCount;
 	var quality = posjson.Quality;
 	
+
 	//check if message is complete
 	if((posjson.X == -1) || (posjson.Y == -1) || (posjson.Elv == -1) || posjson.Id=="")
 	{
@@ -173,12 +177,13 @@ RtPosModule.prototype.OnNewPosition = function(message)
 	}
 	
    var ogid = -1;
+	var messagefromid = '';
    for(var i=0;i<this.ids.length;i++)
    {
       if(this.ids[i].id == id)
       {
          ogid = this.ids[i].ogid;
-         
+			messagefromidid = this.ids[i].id;
       }
    }
    
@@ -201,10 +206,22 @@ RtPosModule.prototype.OnNewPosition = function(message)
 			ogSetGeometryPositionWGS84Quat(ogid,lng,lat,elv,quaternion);
 			if(this.followMode)
 			{
-				this._setcamera(lng,lat,elv,quaternion);
+				if(this.activeId == id)
+				{
+					this._setcamera(lng,lat,elv,quaternion);
+				}
+				
+			}
+			else if(this.thirdMan)
+			{
+				if(this.activeId == id)
+				{
+					var cam = ogGetActiveCamera(this.scene);
+					ogSetPosition(cam,lng+0.0002,lat,elv+30);
+					ogLookAt(this.scene,lng,lat,elv);
+				}
 			}
 		}
-
    }
    else
    {
@@ -231,7 +248,19 @@ RtPosModule.prototype.OnNewPosition = function(message)
 		}
 		else
 		{
-			var frustum = this.CreateFrustum();
+			if(id=='icare1')
+			{
+				var frustum = this.CreateCube(2,[1,0,0,0.3]);
+			}
+			else if(id == 'icare2')
+			{
+				var frustum = this.CreateCube(2,[0,1,0,0.3]);
+			}
+			else
+			{
+				var frustum = this.CreateFrustum(-0.5,0.5,-0.5,0.5,-1,-5);
+			}
+			
 			
 			var frustumid = ogCreateGeometry(this.geolayer,frustum);
 			var idinfo = {
@@ -243,6 +272,13 @@ RtPosModule.prototype.OnNewPosition = function(message)
 			this.ids.push(idinfo);	
 		}
    }
+	
+	//update quality indicator and message
+	updateQualityIndicator(messagefromidid,quality); //updates the quality indicator on homepage
+	if(msg != '')
+	{
+		updateMessageNode(messagefromidid,msg); //updates the message div on homepage.
+	}
 }
 
 RtPosModule.prototype.Show = function(id)
@@ -273,10 +309,8 @@ RtPosModule.prototype.Hide = function(id)
 
 RtPosModule.prototype._setcamera = function(lng,lat,elv,quats)
 {
-		
-	ogSetPosition(this.cam,lng,lat,elv);
-	ogSetOrientationFromQuaternion(this.cam, quats[0],quats[1],quats[2],quats[3]);
-	
+		ogSetPosition(this.cam,lng,lat,elv);
+		ogSetOrientationFromQuaternion(this.cam, quats[0],quats[1],quats[2],quats[3]);	
 }
 
 //------------------------------------------------------------------------------
@@ -287,16 +321,53 @@ RtPosModule.prototype._setcamera = function(lng,lat,elv,quats)
  */
 RtPosModule.prototype.FollowModeOn = function(soldierid)
 {
-	this.cam = ogGetActiveCamera(this.scene);
-	this.followMode = true;
-	
+	for(var i=0;i<this.ids.length;i++)
+   {
+      if(this.ids[i].id == soldierid)
+      {
+			this.cam = ogGetActiveCamera(this.scene);
+			this.followMode = true;
+			this.activeId = soldierid;
+			
+			this.Hide(soldierid);
+			//hide frustum somwhere here
+			console.log("follow mode for soldier: "+soldierid+" active");
+      }
+   }
 }
 
 
 RtPosModule.prototype.FollowModeOff = function(soldierid)
 {
+	this.Show(soldierid);
 	this.followMode = false;
-	//this.cam = -1;
+	console.log("Third man view for soldier: "+soldierid+" disabled");
+	this.activeId = "";
+
+}
+
+
+//------------------------------------------------------------------------------
+RtPosModule.prototype.thirdManViewOn = function(soldierid)
+{
+	for(var i=0;i<this.ids.length;i++)
+   {
+      if(this.ids[i].id == soldierid)
+      {
+			this.cam = ogGetActiveCamera(this.scene);
+			this.thirdMan = true;
+			this.activeId = soldierid;
+			console.log("Third man view for soldier: "+soldierid+" active");
+      }
+   }
+}
+
+//------------------------------------------------------------------------------
+RtPosModule.prototype.thirdManViewOff = function(soldierid)
+{
+	this.thirdMan = false;
+	this.activeId = "";
+	console.log("Third man view for soldier: "+soldierid+" disabled");
 }
 
 
@@ -317,7 +388,7 @@ RtPosModule.prototype.GetConnectedIds = function()
 * @param {number} far
 */
 
-RtPosModule.prototype.CreateFrustum = function(left,right,bottom,top,near,far)
+RtPosModule.prototype.CreateFrustum = function(left,right,bottom,top,znear,zfar)
 {
 
 	//ToDo: Replace this...
@@ -327,13 +398,13 @@ RtPosModule.prototype.CreateFrustum = function(left,right,bottom,top,near,far)
 	top = 100;
 	znear = -200;
 	zfar = -1000;*/
-	
-	left = -1;
+	/*
+	left = -1; 
 	right = 1;
 	bottom = -1;
 	top = 1;
 	znear = -2;
-	zfar = -10;
+	zfar = -10;*/
 	
 	//create 8 points for a cube
 	var p1 = new vec3(-1,-1,-1);
@@ -456,5 +527,77 @@ RtPosModule.prototype.CreateFrustum = function(left,right,bottom,top,near,far)
 	
 	return frustumgeometry;
 }
+
+
+RtPosModule.prototype.CreateCube = function(size,color)
+{
+	
+	var vertices = [];
+	vertices = [-0.5*size,-0.5*size,-0.5*size,color[0],color[1],color[2],color[3],
+					0.5*size,-0.5*size,-0.5*size,color[0],color[1],color[2],color[3],
+					0.5*size,0.5*size,-0.5*size,color[0],color[1],color[2],color[3],
+					-0.5*size,0.5*size,-0.5*size,color[0],color[1],color[2],color[3],
+					-0.5*size,-0.5*size,0.5*size,color[0],color[1],color[2],color[3],
+					0.5*size,-0.5*size,0.5*size,color[0],color[1],color[2],color[3],
+					0.5*size,0.5*size,0.5*size,color[0],color[1],color[2],color[3],
+					-0.5*size,0.5*size,0.5*size,color[0],color[1],color[2],color[3]];
+
+		
+	var linevertices = vertices;
+	
+	
+	
+	var indices = [6,7,4,
+						6,4,5,
+						1,6,5,
+						1,2,6,
+						2,7,3,
+						2,6,7,
+						0,4,3,
+						3,4,7,
+						0,1,3,
+						1,2,3,
+						1,0,5,
+						0,4,5							
+						];
+	
+	var lineindices = [0,1,
+							 1,2,
+							 2,3,
+							 3,0,
+							 1,5,
+							 2,6,
+							 3,7,
+							 0,4,
+							 6,5,
+							 5,4,
+							 4,7,
+							 7,6];
+				
+	var cubegeometry = [[{
+			"id"  :  "1",
+         "Center"  :  [7.600771, 46.760578, 7000],
+			"VisibilityDistance" : 100000,
+         "VertexSemantic"  :  "pc",
+         "Vertices"  :  linevertices,
+         "IndexSemantic"  :  "LINES",
+         "Indices"  :  lineindices
+	},{
+			"id"  :  "1",
+         "Center"  :  [7.600771, 46.760578, 7000],
+			"VisibilityDistance" : 100000,
+         "VertexSemantic"  :  "pc",
+         "Vertices"  :  vertices,
+         "IndexSemantic"  :  "TRIANGLES",
+         "Indices"  :  indices
+	}]];
+	
+	
+	
+	return cubegeometry;
+	
+}
+
+
 
 
