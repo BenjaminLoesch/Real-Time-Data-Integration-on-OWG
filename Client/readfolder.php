@@ -1,13 +1,5 @@
 <?php
-				/*if ($handle = opendir('./pcdata')) {	
-					while (false !== ($file = readdir($handle))) { 
-						if(($file!=='.' && $file!=='..' && $file!=='xyz'))
-                  {
-                     echo $file.",";
-						}	
-					}
-					closedir($handle);
-				}*/
+
 				$max_files = $_GET["maxfiles"];
 				$folder = $_GET["folder"];
 
@@ -16,10 +8,16 @@
 				$i = 0;
 				if ($handle = opendir($folder)) {	
 					while (false !== ($file = readdir($handle))) { 
-						if(($file!=='.' && $file!=='..' && $file!=='xyz'))
+						if(($file!=='.' && $file!=='..'))
                   {
-                     $filenames[] = $file;
-							$i=$i+1;
+								$extension = substr($file,strlen($file)-3,strlen($file));
+								
+								if($extension == 'xyz')
+								{
+									$filenames[] = $file;
+								   $i=$i+1;			
+								}
+                     
 						}	
 					}
 					closedir($handle);
@@ -36,5 +34,4 @@
 					echo $filenames[$j].",";
 				}
 					
-				
 ?>

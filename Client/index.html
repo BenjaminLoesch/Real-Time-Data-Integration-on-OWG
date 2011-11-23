@@ -30,6 +30,39 @@
 
 <script type="text/javascript">
 
+
+//--------------- Definition Section -------------------------------------------
+//------------------------------------------------------------------------------
+
+
+const const_rtpcfilefolder = "pcdata";
+const const_maxpointcloudfiles = 20;
+const const_pcfilerefreshinterval = 2000;
+
+
+//const const_wsaddress = 'ws://127.0.0.1:4123/consoleappsample';
+const const_wsaddress = 'ws://10.218.9.120:4123/consoleappsample';
+//const const_wsaddress = 'ws://10.10.5.130:4123/consoleappsample';
+
+const const_wsreconnectinterval = 10000;
+
+//frustum size
+// eth
+const const_frustumleft = -0.5;
+const const_frustumright = 0.5;
+const const_frustumbottom = -0.5;
+const const_frustumtop = 0.5;
+const const_frustumznear = -1;
+const const_frustumzfar = -5;
+
+//cube
+// icare1
+const const_icare1size = 2;
+const const_icare1color = [1,0,0,0.3];
+const const_icare2size = 2;
+const const_icare2color =[0,1,0,0.3];
+
+
 //--------------- Global Vars --------------------------------------------------
 //------------------------------------------------------------------------------
 var ctx;
@@ -38,7 +71,7 @@ var globe;
 var world;
 var cam;
 var rtmodule;
-var viewiterator = -1;
+
 
 //--------------- Main ---------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -92,10 +125,6 @@ function main()
 				service: "owg"
 			});
 
-   // event callbacks
-   ogSetRenderFunction(ctx, OnRender);
-	ogSetMouseDownFunction(ctx,OnMouseDown);
-   ogSetKeyDownFunction(ctx,onkey);
  
 
   
@@ -130,77 +159,6 @@ function settime () {
   timepanel.innerHTML = time;
 }
 
-//-------- Event Callback Functions --------------------------------------------
-//------------------------------------------------------------------------------
-function OnRender(context)
-{  
-   ogSetTextColor(context, 0,1,0);
-}
-
-
-
-
-function onkey(ctx,key)
-{
-	if(key==49)
-	{
-		rtmodule.FollowModeOn(cam);
-	}
-	if(key==50)
-	{
-		rtmodule.FollowModeOff();
-	}
-	if(key==96)
-	{
-		pos = ogGetPosition(scene);
-		ori = ogGetOrientation(scene);
-		console.log(" "+pos.longitude+","+pos.latitude+","+pos.elevation+","+ori.yaw+","+ori.pitch+","+ori.roll);
-	}
-	//iterate trough all views
-	if(key == 39) //->
-	{
-		view += 1;
-		view %= 8;
-		switch(viewiterator)
-		{
-			case 0:	ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,0,-90,0);
-						break;
-			case 1:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,0,-45,0);
-						break;
-			case 2:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,90,-45,0);
-						break;
-			case 3:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,180,-45,0);
-						break;
-			case 4:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,270,-45,0);
-						break;
-			case 5:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,270,-20,0);
-						break;
-			case 6:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,0,-20,0);
-						break;
-			case 7:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,90,-20,0);
-						break;
-			case 8:  ogFlyToLookAtPosition(scene,7.600478649139404,46.76235580444336,560,200,180,-20,0);
-						break;
-		}
-	}
-	console.log(key);
-}
-
-
-function OnMouseDown(context, button, mx, my)
-{
-   // retrieve the scene attached to context:
-   var scene = ogGetScene(context);
-   
-   // call the pickglobe function, this gives the result in lng, lat, elv
-   var result = ogPickGlobe(scene, mx, my);
-   if (result[0])
-   {
-      console.log("pick result: lng=" + result[1] + ", lat=" + result[2] + ", elv=" + result[3]);  
-   }
-}
-
-//------------------------------------------------------------------------------
    
 </script>
 </head>

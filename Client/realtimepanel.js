@@ -1,10 +1,8 @@
 function createRealTimePanel(divPointCloudPanel)
 {
       // instanciate RealTime Module
-      rtmodule = new RtPosModule(scene,'ws://127.0.0.1:4123/consoleappsample',false);
-      //rtmodule = new RtPosModule(scene,'ws://10.10.5.130:4123/consoleappsample',false);
-
-      
+      rtmodule = new RtPosModule(scene,const_wsaddress ,false);
+     
       
       
       

@@ -102,7 +102,7 @@ PcFile.prototype._parseFile = function(filecontent)
    this.ogid = ogCreateGeometry(this.geometrylayer,pointspritejson);
    var a=0;
    var pos =  pointspritejson["Center"];
-   ogFlyToLookAtPosition(this.scene, pos[0], pos[1], pos[2],200);
+   
 }
 
 

@@ -70,9 +70,9 @@ namespace UdpWSBridge.ConsoleApp
         public void sendPositionUpdate(PosData posdata)
         {
             string msg = "{ \"Id\":\"" + posdata.Id +
-                            "\",\"X\":" + posdata.X +
-                            ",\"Y\":" + posdata.Y +
-                            ",\"Elv\":" + posdata.Elv +
+                            "\",\"X\":" + String.Format("{0:0.####}", posdata.X) +
+                            ",\"Y\":" + String.Format("{0:0.####}", posdata.Y) +
+                            ",\"Elv\":" + String.Format("{0:0.####}", posdata.Elv) +
                             ",\"Qx\":" + posdata.Quat_x +
                             ",\"Qy\":" + posdata.Quat_y +
                             ",\"Qz\":" + posdata.Quat_z +
@@ -95,7 +95,7 @@ namespace UdpWSBridge.ConsoleApp
                 }
             }
             Console.WriteLine(DateTime.Now + " [WebSocketServer] sent message broadcast: \n" + msg+"\n\n");
-
+            //Console.ReadLine();
         }
     }
 }

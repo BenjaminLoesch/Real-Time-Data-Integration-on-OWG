@@ -1,8 +1,8 @@
 function createRtPointCloudPanel(div)
 {
    // instanciate PointCloudFile Manager
-   var pcfm = new PointCloudFileManager("N:",this.scene);
-	
+   //var pcfm = new PointCloudFileManager("N:",this.scene);
+	var pcfm = new PointCloudFileManager(const_rtpcfilefolder,this.scene);
    
    var cbon = function(){
       pcfm.ShowPointCloud();

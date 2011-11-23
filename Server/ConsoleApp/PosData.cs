@@ -14,30 +14,30 @@ namespace UdpWSBridge.ConsoleApp
             get { return id; }
             set { id = value; }
         }
-        private float x=-1;
+        private double x=-1;
 
-        public float X
+        public double X
         {
             get { return x; }
             set { x = value; }
         }
-        private float y=-1;
+        private double y=-1;
 
-        public float Y
+        public double Y
         {
             get { return y; }
             set { y = value; }
         }
-        private float elv=-1;
+        private double elv=-1;
 
-        public float Elv
+        public double Elv
         {
             get { return elv; }
             set { elv = value; }
         }
-        private float timestamp=-1;
+        private double timestamp=-1;
 
-        public float Timestamp
+        public double Timestamp
         {
             get { return timestamp; }
             set { timestamp = value; }
@@ -58,9 +58,9 @@ namespace UdpWSBridge.ConsoleApp
             set { msgcount = value; }
         }
 
-        private float version;
+        private double version;
 
-        public float Version
+        public double Version
         {
             get { return version; }
             set { version = value; }
@@ -74,41 +74,41 @@ namespace UdpWSBridge.ConsoleApp
             set { message = value; }
         }
 
-        private float quality;
+        private double quality;
 
-        public float Quality
+        public double Quality
         {
             get { return quality; }
             set { quality = value; }
         }
 
-        private float quat_x;
+        private double quat_x;
 
-        public float Quat_x
+        public double Quat_x
         {
             get { return quat_x; }
             set { quat_x = value; }
         }
 
-        private float quat_y;
+        private double quat_y;
 
-        public float Quat_y
+        public double Quat_y
         {
             get { return quat_y; }
             set { quat_y = value; }
         }
 
-        private float quat_z;
+        private double quat_z;
 
-        public float Quat_z
+        public double Quat_z
         {
             get { return quat_z; }
             set { quat_z = value; }
         }
 
-        private float quat_w;
+        private double quat_w;
 
-        public float Quat_w
+        public double Quat_w
         {
             get { return quat_w; }
             set { quat_w = value; }

@@ -72,7 +72,7 @@ namespace UdpWSBridge.ConsoleApp
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    Console.ReadLine();
+                    
                 }
 
             }
@@ -166,7 +166,7 @@ namespace UdpWSBridge.ConsoleApp
             }
 
             this.wsserver.sendPositionUpdate(posdata);
- 
+            
 
 
         }

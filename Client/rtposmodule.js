@@ -127,7 +127,7 @@ RtPosModule.prototype.Init = function(oninitcallback,onclosecallback)
 			rtmod.isConnected = false;
 			clearTimeout(rtmod.timer);
 			//try to reconnect in 10 seconds
-			this.timer = setTimeout(function(){rtmod.Init()},10000);
+			this.timer = setTimeout(function(){rtmod.Init()},const_wsreconnectinterval);
 			rtmod.onclosecallback();
 		};
 		
@@ -183,7 +183,7 @@ RtPosModule.prototype.OnNewPosition = function(message)
       if(this.ids[i].id == id)
       {
          ogid = this.ids[i].ogid;
-			messagefromidid = this.ids[i].id;
+			messagefromid = this.ids[i].id;
       }
    }
    
@@ -222,6 +222,16 @@ RtPosModule.prototype.OnNewPosition = function(message)
 				}
 			}
 		}
+		//update quality indicator and message
+		if(messagefromid)
+		{
+			updateQualityIndicator(messagefromid,quality); //updates the quality indicator on homepage
+		}
+	
+		if(msg != '')
+		{
+			updateMessageNode(messagefromid,msg); //updates the message div on homepage.
+		}
    }
    else
    {
@@ -250,18 +260,21 @@ RtPosModule.prototype.OnNewPosition = function(message)
 		{
 			if(id=='icare1')
 			{
-				var frustum = this.CreateCube(2,[1,0,0,0.3]);
+				var frustum = this.CreateCube(const_icare1size,const_icare1color);
 			}
 			else if(id == 'icare2')
 			{
-				var frustum = this.CreateCube(2,[0,1,0,0.3]);
+				var frustum = this.CreateCube(const_icare2size,const_icare2color);
+			}
+			else if(id == 'eth1')
+			{
+				var frustum = this.CreateFrustum(const_frustumleft,const_frustumright,const_frustumbottom,const_frustumtop,const_frustumznear,const_frustumzfar);
 			}
 			else
 			{
-				var frustum = this.CreateFrustum(-0.5,0.5,-0.5,0.5,-1,-5);
+				return
 			}
-			
-			
+
 			var frustumid = ogCreateGeometry(this.geolayer,frustum);
 			var idinfo = {
 				"ogid" : frustumid,
@@ -273,12 +286,7 @@ RtPosModule.prototype.OnNewPosition = function(message)
 		}
    }
 	
-	//update quality indicator and message
-	updateQualityIndicator(messagefromidid,quality); //updates the quality indicator on homepage
-	if(msg != '')
-	{
-		updateMessageNode(messagefromidid,msg); //updates the message div on homepage.
-	}
+	
 }
 
 RtPosModule.prototype.Show = function(id)
