@@ -1,112 +1,83 @@
-body
-{
-   font-family : sans-serif;
+body {
+    font-family: sans-serif;
 }
-
-#divcanvas
-{
-   position : absolute;
-   
-   top : 80px;
-   /*left : 260px;*/
-   /*width : 100%;
-   height : 100%; */
+#divcanvas {
+    position: absolute;
+    top: 80px;
 }
-
-#divHeader
-{
-   position :  absolute;
-   left : 0px;
-   top : 0px;
-   width : 100%;
-   height : 80px;
-   background-color : #ffffff;
+#divHeader {
+    background-color: #FFFFFF;
+    border-bottom-style: ridge;
+    height: 77px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
-
-#divViewOptions
-{
-   position :  absolute;
-   left : 0px;
-   top : 120px;
-   width : 260px;
-   height : 120px;
-   background-color : #ffffff;
+#divViewOptions {
+    background-color: #FFFFFF;
+    border-bottom-style: ridge;
+    height: 100px;
+    left: 0;
+    position: absolute;
+    top: 80px;
+    width: 275px;
 }
-
-#divPointCloudOptions
-{
-   position :  absolute;
-   left : 0px;
-   top : 270px;
-   width : 260px;
-   height : 100px;
-   background-color : #ffffff;
+#divPointCloudOptions {
+    background-color: #FFFFFF;
+    border-bottom-style: ridge;
+    height: 154px;
+    left: 0;
+    position: absolute;
+    top: 183px;
+    width: 275px;
 }
-
-#divRealTimeDataOptions
-{
-   position :  absolute;
-   left : 0px;
-   top : 420px;
-   width : 760px;
-   height : 100px;
-   background-color : #ffffff;
+#divRealTimeDataOptions {
+    background-color: #FFFFFF;
+    border-bottom-style: solid;
+    bottom: 0;
+    height: 100px;
+    left: 0;
+    position: absolute;
+    width: 760px;
 }
-/*
-#divConfigOptions
-{
-   position :  absolute;
-   left : 0px;
-   top : 570px;
-   width : 140px;
-   height : 100px;
-   background-color : #ffffff;
+#divRealTimePcOptions {
+    background-color: #FFFFFF;
+    border-bottom-style: solid;
+    height: 100px;
+    left: 0;
+    position: absolute;
+    top: 340px;
+    width: 275px;
 }
-*/
-#divRealTimePcOptions
-{
-   position :  absolute;
-   left : 0px;
-   top : 570px;
-   width : 260px;
-   height : 100px;
-   background-color : #ffffff;
-}
-
-#divTimeDisplay
-{
+#divTimeDisplay {
     background-color: #FFFFFF;
     font-weight: bold;
     height: 10px;
     position: absolute;
     right: -20px;
+    top: 56px;
     width: 100px;
-    top: 56px
 }
-
-.soldiermessages
-{
+.soldiermessages {
     background-color: #FFFFFF;
+    bottom: 10px;
     font-weight: bold;
     height: 100px;
     position: absolute;
     right: 20px;
     width: 800px;
-    bottom: 10px;
 }
-
-.settingtable
-{
-   font-size : 10pt;
-   padding-left: 10px;
+.settingtable {
+    font-size: 10pt;
+    padding-left: 27px;
+    padding-top: 5px;
 }
 .onoffelement {
     padding-left: 10px;
-    padding-right:  10px;
+    padding-right: 10px;
 }
-
-/* ----- Logos ---------------------------------------------------------------*/
-#divLogoArmasuisse{
+#divLogoArmasuisse {
     background-color: #FFFFFF;
     background-image: url("../art/logos/swiss.png");
     background-repeat: no-repeat;
@@ -116,9 +87,8 @@ body
     position: relative;
     top: 10px;
     width: 200px;
-   
 }
-#divLogoAll{
+#divLogoAll {
     background-attachment: scroll;
     background-clip: border-box;
     background-color: transparent;
@@ -126,15 +96,16 @@ body
     background-origin: padding-box;
     background-position: 0 0;
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: 100% auto;
     height: 43px;
-    right: 10px;
     position: absolute;
+    right: 10px;
+    text-align: right;
     top: 4px;
     width: 685px;
-    text-align: right;
-   
 }
 
-
-  
+.button-active{
+   color: #ffccff !important;
+   
+}

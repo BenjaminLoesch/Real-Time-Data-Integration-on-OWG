@@ -94,18 +94,18 @@ RtPosModule.prototype.Init = function(oninitcallback,onclosecallback)
 		return;
 	}
 	
-	var ws;
+	
    //try to connect server
 	try{
-      
+      var ws;
 		if("WebSocket" in window)
-                {
-                  ws = new WebSocket(this.wsaddress);
-                }
+      {
+        ws = new WebSocket(this.wsaddress);
+      }
 		else if("MozWebSocket" in window)
-                {
-                  ws = new MozWebSocket(this.wsaddress);
-                }
+      {
+        ws = new MozWebSocket(this.wsaddress);
+      }
 		
 		// when data is comming from the server, this metod is called
 		var rtmod = this;
@@ -118,7 +118,6 @@ RtPosModule.prototype.Init = function(oninitcallback,onclosecallback)
 			rtmod.isConnected = true;
 			clearTimeout(rtmod.timer);
 			rtmod.oninitcallback();
-			
 		};
 	
 		// when the connection is closed, this method is called
@@ -131,9 +130,10 @@ RtPosModule.prototype.Init = function(oninitcallback,onclosecallback)
 			rtmod.onclosecallback();
 		};
 		
-		ws.onerror = function(error)
+		ws.onerror = function(err)
 		{
-			console.log("WebSocketServer not found: "+error);
+			console.log("WebSocketServer not found: "+err.toString());
+			
 		};
    }
 	catch(error)

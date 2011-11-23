@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="design/styles.css">
+<link media="only screen and (min-width: 960px)" rel="stylesheet" type="text/css" href="design/styles.css">
+<link media="only screen and (max-width: 961px)" rel="stylesheet" href="design/ipad.css" type="text/css" />
 
 <!-- jQuery imports -->
 <!--<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
@@ -9,6 +10,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>-->
             
 <link href="jquery/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css"/>
+
   <script src="jquery/jquery.min.js"></script>
   <script src="jquery/jquery-ui.min.js"></script>
 
@@ -87,7 +89,7 @@ function main()
    cam = ogGetActiveCamera(scene);
    
    ogSetBackgroundColor(ctx, 0.2,0.2,0.7,1);
-	ogSetCanvasSizeOffset(scene,16,88);
+	ogSetCanvasSizeOffset(scene,8,100);
 
 /*
    //set up image data source
@@ -172,11 +174,11 @@ function settime () {
 	<div id="divcanvas">
 		<canvas id="canvas"></canvas>
 	</div>
-   <div id="divViewOptions"></div>
+	<div id="divViewOptions"></div>
    <div id="divPointCloudOptions"></div>
+   <div id="divRealTimePcOptions"></div>
+	
    <div id="divRealTimeDataOptions"></div>
-	<div id="divRealTimePcOptions"></div>
-   <div id="divConfigOptions"></div>
 	
 	
 </body>
