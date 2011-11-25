@@ -1,0 +1,112 @@
+body {
+    font-family: sans-serif;
+}
+#divcanvas {
+    position: absolute;
+    top: 80px;
+}
+#divHeader {
+    background-color: #FFFFFF;
+    border-bottom-style: ridge;
+    height: 77px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+#divViewOptions {
+    background-color: #FFFFFF;
+    border-bottom-style: ridge;
+    height: 140px;
+    left: 0;
+    position: absolute;
+    top: 80px;
+    width: 142px;
+}
+#divPointCloudOptions {
+    background-color: #FFFFFF;
+    border-bottom-style: ridge;
+    height: 154px;
+    left: 0;
+    position: absolute;
+    top: 183px;
+    visibility: hidden;
+    width: 275px;
+}
+#divRealTimeDataOptions {
+    background-color: #FFFFFF;
+    border-bottom-style: solid;
+    bottom: 0;
+    height: 100px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+#divRealTimePcOptions {
+    background-color: #FFFFFF;
+    border-bottom-style: solid;
+    height: 100px;
+    left: 0;
+    position: absolute;
+    top: 340px;
+    visibility: hidden;
+    width: 275px;
+}
+#divTimeDisplay {
+    background-color: #FFFFFF;
+    font-weight: bold;
+    height: 10px;
+    position: absolute;
+    right: -20px;
+    top: 56px;
+    visibility: hidden;
+    width: 100px;
+}
+.soldiermessages {
+    background-color: #FFFFFF;
+    bottom: 10px;
+    font-weight: bold;
+    height: 100px;
+    position: absolute;
+    right: 20px;
+    width: 800px;
+}
+.settingtable {
+    font-size: 10pt;
+    padding-left: 4px;
+    padding-top: 5px;
+}
+.onoffelement {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#divLogoArmasuisse {
+    background-color: #FFFFFF;
+    background-image: url("../art/logos/swiss.png");
+    background-repeat: no-repeat;
+    background-size: 50% auto;
+    height: 60px;
+    left: 10px;
+    position: relative;
+    top: 10px;
+    width: 200px;
+}
+#divLogoAll {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: url("../art/logos/logos_all.png");
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    height: 43px;
+    position: absolute;
+    right: 10px;
+    text-align: right;
+    top: 4px;
+    width: 612px;
+}
+.button-active {
+    color: #FFCCFF !important;
+}
