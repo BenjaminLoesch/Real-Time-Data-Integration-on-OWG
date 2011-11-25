@@ -16,14 +16,16 @@ function createRealTimePanel(divPointCloudPanel)
             rtmodule.FollowModeOn("eth1");};
       var cboff = function(){
             rtmodule.FollowModeOff("eth1");
-            flyto(0);};
+            //flyto(0);
+            ogSetOrientation(ogGetActiveCamera(scene),0,0,0);
+            };
       var scout1follow = createToogleButton("eth1follow",cbon,cboff,"Follow Mode");
       
       var cbon = function(){
+            ogSetOrientation(scene,0,0,0);
             rtmodule.thirdManViewOn("eth1");};
       var cboff = function(){
-            rtmodule.thirdManViewOff("eth1");
-            flyto(0);};
+            rtmodule.thirdManViewOff("eth1");};
       var scout1thirdman = createToogleButton("eth1thirdman",cbon,cboff,"3rd Man View");
       var scout1quality = createQualityIndicator("eth1quality");
       var scout1message = createMessageNode("eth1message");
@@ -50,10 +52,10 @@ function createRealTimePanel(divPointCloudPanel)
       var scout2follow = createToogleButton("icare1follow",cbon,cboff,"Follow Mode");
       
       var cbon = function(){
+            ogSetOrientation(scene,0,0,0);
             rtmodule.thirdManViewOn("icare1");};
       var cboff = function(){
-            rtmodule.thirdManViewOff("icare1");
-            flyto(0);};
+            rtmodule.thirdManViewOff("icare1");};
       var scout2thirdman = createToogleButton("icare1thirdman",cbon,cboff,"3rd Man View");
       var scout2quality = createQualityIndicator("icare1quality");
       var scout2message = createMessageNode("icare1message");
@@ -71,10 +73,10 @@ function createRealTimePanel(divPointCloudPanel)
       var cboff = function(){rtmodule.Hide("icare2");};
       var scoutonoff3 = createOnOffElement("icare2",true,cbon,cboff);
       var cbon = function(){
+            ogSetOrientation(scene,0,0,0);
             rtmodule.FollowModeOn("icare2");};
       var cboff = function(){
-            rtmodule.FollowModeOff("icare2");
-            flyto(0);};
+            rtmodule.FollowModeOff("icare2");};
       var scout3follow = createToogleButton("icare2follow",cbon,cboff,"Follow Mode");
       
       var cbon = function(){

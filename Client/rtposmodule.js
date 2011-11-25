@@ -156,16 +156,16 @@ RtPosModule.prototype.OnNewPosition = function(message)
 {
    // retrieve the scene attached to context:
    var posjson = eval("("+message.data+")");
-   var lat=CHtoWGSlat(posjson.Y,posjson.X);
-   var lng=CHtoWGSlng(posjson.Y,posjson.X);
+   var lat=CHtoWGSlat(posjson.X,posjson.Y);
+   var lng=CHtoWGSlng(posjson.X,posjson.Y);
    var elv=posjson.Elv;
    var id=posjson.Id;
 	var qx = posjson.Qy; //note the change!!! according to example janosch...
 	var qy = posjson.Qx;
 	var qz = posjson.Qz;
 	var qw = posjson.Qw;
-	var msg = posjson.Message;
-	var msgcount = posjson.MsgCount;
+	var msg = posjson.MessageCounter;//posjson.Message;
+	var msgcount = posjson.MessageCounter;
 	var quality = posjson.Quality;
 	
 
@@ -217,7 +217,7 @@ RtPosModule.prototype.OnNewPosition = function(message)
 				if(this.activeId == id)
 				{
 					var cam = ogGetActiveCamera(this.scene);
-					ogSetPosition(cam,lng+0.0002,lat,elv+30);
+					ogSetPosition(cam,lng+0.0002,lat,elv+500);
 					ogLookAt(this.scene,lng,lat,elv);
 				}
 			}
@@ -333,6 +333,10 @@ RtPosModule.prototype.FollowModeOn = function(soldierid)
    {
       if(this.ids[i].id == soldierid)
       {
+			if(this.thirdMan)
+			{
+				this.thirdManViewOff(soldierid);
+			}
 			this.cam = ogGetActiveCamera(this.scene);
 			this.followMode = true;
 			this.activeId = soldierid;
@@ -351,7 +355,7 @@ RtPosModule.prototype.FollowModeOff = function(soldierid)
 	this.followMode = false;
 	console.log("Third man view for soldier: "+soldierid+" disabled");
 	this.activeId = "";
-
+	//ogSetOrientation(scene,0,0,0);
 }
 
 
@@ -362,6 +366,10 @@ RtPosModule.prototype.thirdManViewOn = function(soldierid)
    {
       if(this.ids[i].id == soldierid)
       {
+			if(this.followMode)
+			{
+				this.FollowModeOff(soldierid);
+			}
 			this.cam = ogGetActiveCamera(this.scene);
 			this.thirdMan = true;
 			this.activeId = soldierid;

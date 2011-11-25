@@ -12,7 +12,7 @@ function createPointCloudPanel(divPointCloudPanel)
    var pcoptions = { "id"               :  "1",
                      "Center"           :  [7.6383416688350052,47.53326882083595,306.262630000000005],
                      "VertexSemantic"   :  "pc",
-                     "PointUrl"         :  "buildingpc/building.xyz",
+                     "PointUrl"         :  "buildingpc/allpoints.xyz",
                      "NumberOfPoints"   :  70000000,
                      "Type" : "pointcloud"
    } 

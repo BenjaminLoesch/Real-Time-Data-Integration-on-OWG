@@ -3,12 +3,12 @@ Prokoll def:
 
 [Message]\n
 	sender=eth1\n
-	message=blablabla\n		-> wird neben/im Frustum angezeigt.
+	message=blablabla\n		
 	timestamp=231.221\n
 	msgcounter=0\n			-> message counter
 	version=0.0\n			-> protcol version
 [Location]\n
-	pos=200000,600000,1000\n   -> lv03 schweizer landeskoordinaten
+	pos=600000,200000,1000\n   -> lv03 schweizer landeskoordinaten
 	ori=x,y,z,w\n			-> quaternionen parameter
 	quality=0.123\n			-> position quality
 

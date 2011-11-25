@@ -61,19 +61,23 @@ function createToogleButton(name,cbon,cboff,label)
    button.id = name;
    button.style.fontSize = '6pt';
    button.active = false;
+   button.cbon=cbon;
+   button.cboff = cboff;
    jQuery(button).button();
    jQuery(button).click(function(){
       if(this.active)
       {
          cboff();
          button.active = false;
+         jQuery(button).toggleClass('button-active',false);
          jQuery(button).toggleClass('ui-state-focus',false);
       }
       else
-      {
+      {         
          cbon();
          button.active = true;
-         jQuery(button).toggleClass('ui-state-focus',true);
+         jQuery(button).toggleClass('button-active',true);
+          //get all buttons in the same div
       }
                         
       });
@@ -198,8 +202,7 @@ function createMessageNode(name)
 function updateMessageNode(name,message)
 {
    var div = document.getElementById(name+"message");
-   div.innerHTML = message;
-   
+   div.innerHTML = message;  
 }
 
 

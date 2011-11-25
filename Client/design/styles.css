@@ -107,5 +107,8 @@ body {
 
 .button-active{
    color: #ffccff !important;
-   
+   border: 1px solid #fbcb09 !important;
+   background: #fdf5ce url(images/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x !important;
+   font-weight: bold !important;
+   color: #ff0000 !important;   
 }
