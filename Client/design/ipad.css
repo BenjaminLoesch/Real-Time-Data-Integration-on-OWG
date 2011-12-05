@@ -107,6 +107,10 @@ body {
     top: 4px;
     width: 612px;
 }
-.button-active {
-    color: #FFCCFF !important;
+
+.button-active{
+ border: 1px solid #ffaf0f !important;
+ background: #f58400 url(images/ui-bg_inset-soft_30_f58400_1x100.png) 50% 50% repeat-x !important;
+ font-weight: bold !important;
+ color: #ffffff !important; 
 }

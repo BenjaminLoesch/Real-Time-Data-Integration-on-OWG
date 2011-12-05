@@ -29,6 +29,7 @@
 <script type="text/javascript" src="pointcloudpanel.js"></script>
 <script type="text/javascript" src="realtimepanel.js"></script>
 <script type="text/javascript" src="rtpointcloudpanel.js"></script>
+<script type="text/javascript" src="soldier.js"></script>
 
 <script type="text/javascript">
 
@@ -43,7 +44,7 @@ const const_pcfilerefreshinterval = 2000;
 
 
 //const const_wsaddress = 'ws://127.0.0.1:4123/consoleappsample';
-const const_wsaddress = 'ws://10.218.9.18:4123/consoleappsample';
+const const_wsaddress = 'ws://10.218.9.22:4123/consoleappsample';
 //const const_wsaddress = 'ws://10.10.5.130:4123/consoleappsample';
 
 const const_wsreconnectinterval = 10000;
@@ -73,6 +74,7 @@ var globe;
 var world;
 var cam;
 var rtmodule;
+var isflying;
 
 
 //--------------- Main ---------------------------------------------------------
@@ -128,19 +130,51 @@ function main()
 			});
 
  
-
+	
+	
+		
+	
   
    //Fly to start position
-   ogSetPosition(cam,7.600771,46.760578,7000)
+   ogSetPosition(cam,7.600771,46.760578,7000);
 	
 	
 	//set up panels
 	createViewPanel(document.getElementById('divViewOptions'));
-	createPointCloudPanel(document.getElementById('divPointCloudOptions'));
-	createRtPointCloudPanel(document.getElementById('divRealTimePcOptions'));
+	if(window.innerWidth>960)
+	{
+		createPointCloudPanel(document.getElementById('divPointCloudOptions'));
+		createRtPointCloudPanel(document.getElementById('divRealTimePcOptions'));
+	}
 	createRealTimePanel(document.getElementById('divRealTimeDataOptions'));
+
 	
 	setInterval("settime()", 1000);
+	
+	//ipad specific events....
+	var c = document.getElementById('canvas');
+	c.addEventListener("touchstart", touchHandler, true);
+   c.addEventListener("touchmove", touchHandler, true);
+   c.addEventListener("touchend", touchHandler, true);
+   c.addEventListener("touchcancel", touchHandler, true);
+   
+   	//set Render Callback
+	ogSetRenderFunction(ctx,onRender);
+	
+	// Set the Fly-To Callback functions.
+	isflying = false;
+	ogSetFlyToStartedFunction(ctx,function(){isflying=true;});
+	ogSetInPositionFunction(ctx,function(){isflying=false;});
+	
+	
+
+
+}
+
+function onRender()
+{
+	rtmodule.UpdateSoldierPositions();
+
 }
 
 
@@ -159,6 +193,39 @@ function settime () {
  
   var timepanel = document.getElementById("divTimeDisplay");
   timepanel.innerHTML = time;
+}
+
+//------ IPAD Touch Handler ----------------------------------------------------
+//------------------------------------------------------------------------------
+function touchHandler(event)
+{
+   var touches = event.changedTouches,
+       first = touches[0],
+       type = "";
+
+        switch(event.type)
+   {
+       case "touchstart": type = "mousedown"; break;
+       case "touchmove":  type="mousemove"; break;
+       case "touchend":   type="mouseup"; break;
+       default: return;
+   }
+
+            //initMouseEvent(type, canBubble, cancelable, view, clickCount,
+   //           screenX, screenY, clientX, clientY, ctrlKey,
+   //           altKey, shiftKey, metaKey, button, relatedTarget);
+
+   var simulatedEvent = document.createEvent("MouseEvent");
+   simulatedEvent.initMouseEvent(type, true, true, window, 1,
+                             first.screenX, first.screenY,
+                             first.clientX, first.clientY, false,
+                             false, false, false, 0/*left*/, null);
+
+
+         first.target.dispatchEvent(simulatedEvent);
+   event.preventDefault();
+   
+   ogSetRenderQuality(world,0.5);
 }
 
    

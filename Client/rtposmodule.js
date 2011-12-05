@@ -41,7 +41,7 @@ function RtPosModule(scene,wsaddress,poimode)
    
    this.wsaddress = wsaddress;
    this.poilayer = ogCreatePOILayer(ogGetWorld(this.scene),"rtlayer");
-   this.ids = [];
+   this.soldiers = [];
 	
 	this.geolayer = null;
 	this.geolayer = ogCreateGeometryLayer(this.world,"rtgeolayer");
@@ -69,6 +69,8 @@ function RtPosModule(scene,wsaddress,poimode)
 	this.oninitcallback = null;
 	this.onclosecallback = null;
 	
+	this.updateThridManView = 9;
+		
 }
 
 //------------------------------------------------------------------------------
@@ -156,17 +158,9 @@ RtPosModule.prototype.OnNewPosition = function(message)
 {
    // retrieve the scene attached to context:
    var posjson = eval("("+message.data+")");
-   var lat=CHtoWGSlat(posjson.X,posjson.Y);
-   var lng=CHtoWGSlng(posjson.X,posjson.Y);
-   var elv=posjson.Elv;
-   var id=posjson.Id;
-	var qx = posjson.Qy; //note the change!!! according to example janosch...
-	var qy = posjson.Qx;
-	var qz = posjson.Qz;
-	var qw = posjson.Qw;
-	var msg = posjson.MessageCounter;//posjson.Message;
-	var msgcount = posjson.MessageCounter;
-	var quality = posjson.Quality;
+  
+	
+   var actualsoldier = null;
 	
 
 	//check if message is complete
@@ -178,17 +172,18 @@ RtPosModule.prototype.OnNewPosition = function(message)
 	
    var ogid = -1;
 	var messagefromid = '';
-   for(var i=0;i<this.ids.length;i++)
+   for(var i=0;i<this.soldiers.length;i++)
    {
-      if(this.ids[i].id == id)
+      if(this.soldiers[i].id == posjson.Id)
       {
-         ogid = this.ids[i].ogid;
-			messagefromid = this.ids[i].id;
+		actualsoldier = this.soldiers[i];
+		actualsoldier.SetData(posjson);
       }
    }
    
-   if(ogid>0)
+   if(actualsoldier)
    {
+		/*
 		if(this.poimode)
 		{
 			//id is already known, so just change position
@@ -202,39 +197,38 @@ RtPosModule.prototype.OnNewPosition = function(message)
 		}
 		else
 		{
-			var quaternion =[qx,qy,qz,qw];
-			ogSetGeometryPositionWGS84Quat(ogid,lng,lat,elv,quaternion);
+			var quaternion =[actualsoldier.qx,actualsoldier.qy,actualsoldier.qz,actualsoldier.qw];
+			//ogSetGeometryPositionWGS84Quat(actualsoldier.ogid,actualsoldier.filteredlng,actualsoldier.filteredlat,actualsoldier.filteredelv,quaternion);
 			if(this.followMode)
 			{
-				if(this.activeId == id)
-				{
-					this._setcamera(lng,lat,elv,quaternion);
-				}
-				
+					
+					this._setcamera(actualsoldier.lng,actualsoldier.lat,actualsoldier.elv,quaternion);	
 			}
 			else if(this.thirdMan)
 			{
-				if(this.activeId == id)
-				{
-					var cam = ogGetActiveCamera(this.scene);
-					ogSetPosition(cam,lng+0.0002,lat,elv+500);
-					ogLookAt(this.scene,lng,lat,elv);
+			   this.updateThridManView++;
+			   if(this.updateThridManView==10){ 
+				 ogSetFlightDuration(this.scene,1000);
+				   ogFlyToLookAtPosition(this.scene,actualsoldier.filteredlng,actualsoldier.filteredlat,actualsoldier.filteredelv,50,0,-45,0);
+				   this.updateThridManView=1;
 				}
 			}
 		}
+		*/
 		//update quality indicator and message
-		if(messagefromid)
+		if(actualsoldier.quality>0)
 		{
-			updateQualityIndicator(messagefromid,quality); //updates the quality indicator on homepage
+			updateQualityIndicator(actualsoldier.id,actualsoldier.quality); //updates the quality indicator on homepage
 		}
 	
-		if(msg != '')
+		if(actualsoldier.msg != '')
 		{
-			updateMessageNode(messagefromid,msg); //updates the message div on homepage.
+			updateMessageNode(actualsoldier.id,actualsoldier.msg); //updates the message div on homepage.
 		}
    }
    else
    {
+		/*
 		if(this.poimode)
 		{
 			//a new id appeared!
@@ -248,25 +242,23 @@ RtPosModule.prototype.OnNewPosition = function(message)
 			};
 			
 			var ogid = ogCreatePOI(this.poilayer,options);
-			var idinfo = {
-				"ogid" : ogid,
-				"id" : id
-			}
+			var soldier = new Soldier(ogid,id);
 			
 			//add it to the ids array
-			this.ids.push(idinfo);
+			this.soldiers.push(soldier);
 		}
 		else
 		{
-			if(id=='icare1')
+		*/
+			if(posjson.Id=='icare1')
 			{
 				var frustum = this.CreateCube(const_icare1size,const_icare1color);
 			}
-			else if(id == 'icare2')
+			else if(posjson.Id == 'icare2')
 			{
 				var frustum = this.CreateCube(const_icare2size,const_icare2color);
 			}
-			else if(id == 'eth1')
+			else if(posjson.Id == 'eth1')
 			{
 				var frustum = this.CreateFrustum(const_frustumleft,const_frustumright,const_frustumbottom,const_frustumtop,const_frustumznear,const_frustumzfar);
 			}
@@ -276,14 +268,12 @@ RtPosModule.prototype.OnNewPosition = function(message)
 			}
 
 			var frustumid = ogCreateGeometry(this.geolayer,frustum);
-			var idinfo = {
-				"ogid" : frustumid,
-				"id" : id
-			}
+			var soldier = new Soldier(frustumid,posjson.Id);
+				
 			
 			//add it to the ids array
-			this.ids.push(idinfo);	
-		}
+			this.soldiers.push(soldier);	
+		//}
    }
 	
 	
@@ -291,25 +281,22 @@ RtPosModule.prototype.OnNewPosition = function(message)
 
 RtPosModule.prototype.Show = function(id)
 {
-	for(var i=0;i<this.ids.length;i++)
+	for(var i=0;i<this.soldiers.length;i++)
    {
-      if(this.ids[i].id == id)
+      if(this.soldiers[i].id == id)
       {
-         ogid = this.ids[i].ogid;
-			ogShowGeometry(ogid);
-         
+		this.soldiers[i].Show();
       }
    }
 }
 
 RtPosModule.prototype.Hide = function(id)
 {
-	for(var i=0;i<this.ids.length;i++)
+	for(var i=0;i<this.soldiers.length;i++)
    {
-      if(this.ids[i].id == id)
+      if(this.soldiers[i].id == id)
       {
-         ogid = this.ids[i].ogid;
-			ogHideGeometry(ogid); 
+		this.soldiers[i].Hide();
       }
    }
 }
@@ -329,11 +316,14 @@ RtPosModule.prototype._setcamera = function(lng,lat,elv,quats)
  */
 RtPosModule.prototype.FollowModeOn = function(soldierid)
 {
-	for(var i=0;i<this.ids.length;i++)
+	for(var i=0;i<this.soldiers.length;i++)
    {
-      if(this.ids[i].id == soldierid)
+      if(this.soldiers[i].id == soldierid)
       {
-			if(this.thirdMan)
+
+			this.soldiers[i].Hide();
+			this.soldiers[i].followmode = true;
+			/*if(this.thirdMan)
 			{
 				this.thirdManViewOff(soldierid);
 			}
@@ -343,29 +333,40 @@ RtPosModule.prototype.FollowModeOn = function(soldierid)
 			
 			this.Hide(soldierid);
 			//hide frustum somwhere here
-			console.log("follow mode for soldier: "+soldierid+" active");
+			console.log("follow mode for soldier: "+soldierid+" active");*/
       }
+	  else
+	  {
+		this.soldiers[i].followmode = false;
+	  }
    }
 }
 
 
 RtPosModule.prototype.FollowModeOff = function(soldierid)
 {
-	this.Show(soldierid);
+	for(var i=0;i<this.soldiers.length;i++)
+	{
+		this.soldiers[i].Show();
+		this.soldiers[i].followmode = false;
+	}
+	/*this.Show(soldierid);
 	this.followMode = false;
 	console.log("Third man view for soldier: "+soldierid+" disabled");
 	this.activeId = "";
-	//ogSetOrientation(scene,0,0,0);
+	//ogSetOrientation(scene,0,0,0);*/
 }
 
 
 //------------------------------------------------------------------------------
 RtPosModule.prototype.thirdManViewOn = function(soldierid)
 {
-	for(var i=0;i<this.ids.length;i++)
-   {
-      if(this.ids[i].id == soldierid)
+	for(var i=0;i<this.soldiers.length;i++)
+	{
+      if(this.soldiers[i].id == soldierid)
       {
+			this.soldiers[i].thirdmanview = true;
+	  /*
 			if(this.followMode)
 			{
 				this.FollowModeOff(soldierid);
@@ -374,24 +375,42 @@ RtPosModule.prototype.thirdManViewOn = function(soldierid)
 			this.thirdMan = true;
 			this.activeId = soldierid;
 			console.log("Third man view for soldier: "+soldierid+" active");
+			*/
       }
+	  else
+	  {
+			this.soldiers[i].thirdmanview = false;
+	  }
    }
 }
 
 //------------------------------------------------------------------------------
 RtPosModule.prototype.thirdManViewOff = function(soldierid)
 {
+	for(var i=0;i<this.soldiers.length;i++)
+	{
+		this.soldiers[i].thirdmanview = false;
+	}
+/*
 	this.thirdMan = false;
 	this.activeId = "";
 	console.log("Third man view for soldier: "+soldierid+" disabled");
+	*/
 }
 
 
 RtPosModule.prototype.GetConnectedIds = function()
 {
-	return this.ids;
+	return this.soldiers;
 }
 
+RtPosModule.prototype.UpdateSoldierPositions = function()
+{
+	for(var i=0;i<this.soldiers.length;i++)
+	{
+		this.soldiers[i].Update();
+	}
+}
 
 //------------------------------------------------------------------------------
 /*

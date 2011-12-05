@@ -1,5 +1,7 @@
 body {
     font-family: sans-serif;
+   overflow-x : none;
+   overflow-y : none;
 }
 #divcanvas {
     position: absolute;
@@ -73,6 +75,12 @@ body {
     padding-left: 27px;
     padding-top: 5px;
 }
+
+.settingtable th {
+	/*color: #ff0000;*/
+	text-align: left;
+
+}
 .onoffelement {
     padding-left: 10px;
     padding-right: 10px;
@@ -106,9 +114,8 @@ body {
 }
 
 .button-active{
-   color: #ffccff !important;
-   border: 1px solid #fbcb09 !important;
-   background: #fdf5ce url(images/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x !important;
-   font-weight: bold !important;
-   color: #ff0000 !important;   
+ border: 1px solid #ffaf0f !important;
+ background: #f58400 url(images/ui-bg_inset-soft_30_f58400_1x100.png) 50% 50% repeat-x !important;
+ font-weight: bold !important;
+ color: #ffffff !important; 
 }

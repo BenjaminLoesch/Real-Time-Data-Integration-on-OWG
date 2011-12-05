@@ -10,7 +10,7 @@ function createPointCloudPanel(divPointCloudPanel)
    // ----- load the MMS building --------------------------------------------------
    var  buildingbutton = createOnOffElement("building",true,cbon,cboff);
    var pcoptions = { "id"               :  "1",
-                     "Center"           :  [7.6383416688350052,47.53326882083595,306.262630000000005],
+                     "Center"           :  [7.600401953052925,46.76243052393125,587.476649921103],
                      "VertexSemantic"   :  "pc",
                      "PointUrl"         :  "buildingpc/allpoints.xyz",
                      "NumberOfPoints"   :  70000000,
@@ -21,9 +21,9 @@ function createPointCloudPanel(divPointCloudPanel)
    // ----- load the geosat building --------------------------------------------------
    var  geosatbuilding = createOnOffElement("buildinggeosat",true,cbon,cboff);
    var pcoptions = { "id"               :  "1",
-                     "Center"           :  [7.6383416688350052,47.53326882083595,306.262630000000005],
+                     "Center"           :  [7.601401953052925,46.76243052393125,587.476649921103],
                      "VertexSemantic"   :  "pc",
-                     "PointUrl"         :  "buildingpc/building.xyz",
+                     "PointUrl"         :  "buildingpc/allpoints.xyz",
                      "NumberOfPoints"   :  70000000,
                      "Type" : "pointcloud"
    }
@@ -32,9 +32,9 @@ function createPointCloudPanel(divPointCloudPanel)
    // ----- load the geosat environment --------------------------------------------------
    var  geosatenv = createOnOffElement("envgeosat",true,cbon,cboff);
    var pcoptions = { "id"               :  "1",
-                     "Center"           :  [7.6383416688350052,47.53326882083595,306.262630000000005],
+                     "Center"           :  [7.602401953052925,46.76243052393125,587.476649921103],
                      "VertexSemantic"   :  "pc",
-                     "PointUrl"         :  "buildingpc/building.xyz",
+                     "PointUrl"         :  "buildingpc/allpoints.xyz",
                      "NumberOfPoints"   :  70000000,
                      "Type" : "pointcloud"
    } 
@@ -43,7 +43,7 @@ function createPointCloudPanel(divPointCloudPanel)
    // ----- load the roof ------------------------------------------------------
    var  geosatfloor = createOnOffElement("floorgeosat",true,cbon,cboff);
    var pcoptions = { "id"               :  "1",
-                     "Center"           :  [7.600401953052925,46.76243052393125,587.476649921103],
+                     "Center"           :  [7.603401953052925,46.76243052393125,587.476649921103],
                      "VertexSemantic"   :  "pc",
                      "PointUrl"         :  "buildingpc/allpoints.xyz",
                      "NumberOfPoints"   :  70000000,
@@ -52,9 +52,9 @@ function createPointCloudPanel(divPointCloudPanel)
    geosatfloor.geometryid = ogCreateGeometry(pointcloudlayer,pcoptions);
    
    // ----- load the roof ------------------------------------------------------
-   var  roofbutton = createOnOffElement("buildingroof",true,cbon,cboff);
+   var  roofbutton = createOnOffElement("buildingroof",false,cbon,cboff);
    var pcoptions = { "id"               :  "1",
-                     "Center"           :  [7.600401953052925,46.76243052393125,587.476649921103],
+                     "Center"           :  [7.604401953052925,46.76243052393125,587.476649921103],
                      "VertexSemantic"   :  "pc",
                      "PointUrl"         :  "buildingpc/allpoints.xyz",
                      "NumberOfPoints"   :  70000000,
