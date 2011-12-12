@@ -179,7 +179,7 @@ Soldier.prototype.SetCamera = function(cam,lng,lat,elv,quats)
    var matfinal = new mat4();
    matfinal.Multiply(rotfromquatowg,roll180head90);
    var quat_owg = matfinal.Rot2Quat();
-	ogSetOrientationFromQuaternion(cam, quat_owg[0],quat_owg[1],quat_owg[2],quat_owg[3]);	
+   ogSetOrientationFromQuaternion(cam, quat_owg[0],quat_owg[1],quat_owg[2],quat_owg[3]);	
 
 }
 

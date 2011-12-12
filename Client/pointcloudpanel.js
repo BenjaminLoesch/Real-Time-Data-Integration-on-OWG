@@ -66,10 +66,10 @@ function createPointCloudPanel(divPointCloudPanel)
    // ----- create the setting table -------------------------------------------
    var elements = [];
    elements[0] = ["FHNW MMS Building",buildingbutton];
-   elements[1] = ["GeoSat LS Building", geosatbuilding];
-   elements[2] = ["GeoSat LS Environmental", geosatenv]
-   elements[3] = ["GeoSat LS 4th Floor", geosatfloor]
-   elements[4] = ["GeoSat LS Roof", roofbutton]
+   elements[1] = ["GeoSat LS Facade",roofbutton];
+   elements[2] = ["GeoSat LS Ground Floor", geosatenv];
+   elements[3] = ["GeoSat LS 4th Floor", geosatfloor];
+   elements[4] = ["GeoSat LS Roof",geosatbuilding];
 
    var t = createSettingTable("pointcloudsettingtable","Point Cloud Settings",elements);
    divPointCloudPanel.appendChild(t);    

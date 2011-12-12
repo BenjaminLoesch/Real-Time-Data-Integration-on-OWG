@@ -183,38 +183,6 @@ RtPosModule.prototype.OnNewPosition = function(message)
    
    if(actualsoldier)
    {
-		/*
-		if(this.poimode)
-		{
-			//id is already known, so just change position
-			ogChangePOIPositionWGS84(ogid,lng,lat,elv);
-			if(this.followMode)
-			{
-				ogSetFlightDuration(this.scene,10);
-				ogFlyToLookAtPosition(this.scene,lng,lat,elv,100);
-				ogSetFlightDuration(this.scene,3000);
-			}
-		}
-		else
-		{
-			var quaternion =[actualsoldier.qx,actualsoldier.qy,actualsoldier.qz,actualsoldier.qw];
-			//ogSetGeometryPositionWGS84Quat(actualsoldier.ogid,actualsoldier.filteredlng,actualsoldier.filteredlat,actualsoldier.filteredelv,quaternion);
-			if(this.followMode)
-			{
-					
-					this._setcamera(actualsoldier.lng,actualsoldier.lat,actualsoldier.elv,quaternion);	
-			}
-			else if(this.thirdMan)
-			{
-			   this.updateThridManView++;
-			   if(this.updateThridManView==10){ 
-				 ogSetFlightDuration(this.scene,1000);
-				   ogFlyToLookAtPosition(this.scene,actualsoldier.filteredlng,actualsoldier.filteredlat,actualsoldier.filteredelv,50,0,-45,0);
-				   this.updateThridManView=1;
-				}
-			}
-		}
-		*/
 		//update quality indicator and message
 		if(actualsoldier.quality>0)
 		{
@@ -323,17 +291,6 @@ RtPosModule.prototype.FollowModeOn = function(soldierid)
 
 			this.soldiers[i].Hide();
 			this.soldiers[i].followmode = true;
-			/*if(this.thirdMan)
-			{
-				this.thirdManViewOff(soldierid);
-			}
-			this.cam = ogGetActiveCamera(this.scene);
-			this.followMode = true;
-			this.activeId = soldierid;
-			
-			this.Hide(soldierid);
-			//hide frustum somwhere here
-			console.log("follow mode for soldier: "+soldierid+" active");*/
       }
 	  else
 	  {
@@ -350,11 +307,7 @@ RtPosModule.prototype.FollowModeOff = function(soldierid)
 		this.soldiers[i].Show();
 		this.soldiers[i].followmode = false;
 	}
-	/*this.Show(soldierid);
-	this.followMode = false;
-	console.log("Third man view for soldier: "+soldierid+" disabled");
-	this.activeId = "";
-	//ogSetOrientation(scene,0,0,0);*/
+
 }
 
 
@@ -366,16 +319,6 @@ RtPosModule.prototype.thirdManViewOn = function(soldierid)
       if(this.soldiers[i].id == soldierid)
       {
 			this.soldiers[i].thirdmanview = true;
-	  /*
-			if(this.followMode)
-			{
-				this.FollowModeOff(soldierid);
-			}
-			this.cam = ogGetActiveCamera(this.scene);
-			this.thirdMan = true;
-			this.activeId = soldierid;
-			console.log("Third man view for soldier: "+soldierid+" active");
-			*/
       }
 	  else
 	  {
@@ -391,11 +334,6 @@ RtPosModule.prototype.thirdManViewOff = function(soldierid)
 	{
 		this.soldiers[i].thirdmanview = false;
 	}
-/*
-	this.thirdMan = false;
-	this.activeId = "";
-	console.log("Third man view for soldier: "+soldierid+" disabled");
-	*/
 }
 
 
@@ -424,23 +362,7 @@ RtPosModule.prototype.UpdateSoldierPositions = function()
 */
 
 RtPosModule.prototype.CreateFrustum = function(left,right,bottom,top,znear,zfar)
-{
-
-	//ToDo: Replace this...
-	/*left = -100;
-	right = 100;
-	bottom = -100;
-	top = 100;
-	znear = -200;
-	zfar = -1000;*/
-	/*
-	left = -1; 
-	right = 1;
-	bottom = -1;
-	top = 1;
-	znear = -2;
-	zfar = -10;*/
-	
+{	
 	//create 8 points for a cube
 	var p1 = new vec3(-1,-1,-1);
 	var p2 = new vec3(1,-1,-1);
@@ -460,7 +382,7 @@ RtPosModule.prototype.CreateFrustum = function(left,right,bottom,top,znear,zfar)
 	fmatinv.Inverse(fmat);
 	
 	var mrot = new mat4();
-	mrot.RotationY(-Math.PI/2);
+	//mrot.RotationY(-Math.PI/2);
 	
 	var rotfmat = new mat4();
 	rotfmat.Multiply(mrot,fmatinv);
