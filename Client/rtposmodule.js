@@ -459,19 +459,21 @@ RtPosModule.prototype.CreateFrustum = function(left,right,bottom,top,znear,zfar)
 	var fmatinv = new mat4();
 	fmatinv.Inverse(fmat);
 	
-	var mtrans = new mat4();
-	mtrans.Translation(0,0,zfar-znear);
+	var mrot = new mat4();
+	mrot.RotationY(-Math.PI/2);
 	
+	var rotfmat = new mat4();
+	rotfmat.Multiply(mrot,fmatinv);
 	
 	//calculate the new frustum points
-	pf1 = fmatinv.MultiplyVec3(p1);
-	pf2 = fmatinv.MultiplyVec3(p2);
-	pf3 = fmatinv.MultiplyVec3(p3);
-	pf4 = fmatinv.MultiplyVec3(p4);
-	pf5 = fmatinv.MultiplyVec3(p5);
-	pf6 = fmatinv.MultiplyVec3(p6);
-	pf7 = fmatinv.MultiplyVec3(p7);
-	pf8 = fmatinv.MultiplyVec3(p8);
+	pf1 = rotfmat.MultiplyVec3(p1);
+	pf2 = rotfmat.MultiplyVec3(p2);
+	pf3 = rotfmat.MultiplyVec3(p3);
+	pf4 = rotfmat.MultiplyVec3(p4);
+	pf5 = rotfmat.MultiplyVec3(p5);
+	pf6 = rotfmat.MultiplyVec3(p6);
+	pf7 = rotfmat.MultiplyVec3(p7);
+	pf8 = rotfmat.MultiplyVec3(p8);
 	
 	/*
 	console.log("Frustum created..."+pf1.ToString());

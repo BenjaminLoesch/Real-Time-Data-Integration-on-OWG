@@ -15,10 +15,9 @@
   <script src="jquery/jquery-ui.min.js"></script>
 
 
-<script type="text/javascript" src="openwebglobe_0.7.1.js"></script>
-<!--<script type="text/javascript" src="../../../WebViewerMainFork/WebViewer/external/closure-library/closure/goog/base.js"></script>
-<script type="text/javascript" src="../../../WebViewerMainFork/WebViewer/compiled/deps.js"></script>
-<script type="text/javascript">goog.require('owg.OpenWebGlobe');</script>-->
+<!--<script type="text/javascript" src="openwebglobe_0.7.3.js"></script>-->
+<script type="text/javascript" src="../../../WebViewer/WebViewer/compiled/owg-optimized.js"></script>
+
 
 <script type="text/javascript" src="guihelpers.js"></script>
 <script type="text/javascript" src="rtposmodule.js"></script>
@@ -38,13 +37,13 @@
 //------------------------------------------------------------------------------
 
 
-const const_rtpcfilefolder = "pcdata";
-const const_maxpointcloudfiles = 20;
+const const_rtpcfilefolder = "N:";
+const const_maxpointcloudfiles = 200;
 const const_pcfilerefreshinterval = 2000;
 
 
 //const const_wsaddress = 'ws://127.0.0.1:4123/consoleappsample';
-const const_wsaddress = 'ws://10.218.9.22:4123/consoleappsample';
+const const_wsaddress = 'ws://10.10.5.130:4123/consoleappsample';
 //const const_wsaddress = 'ws://10.10.5.130:4123/consoleappsample';
 
 const const_wsreconnectinterval = 10000;
@@ -55,15 +54,15 @@ const const_frustumleft = -0.5;
 const const_frustumright = 0.5;
 const const_frustumbottom = -0.5;
 const const_frustumtop = 0.5;
-const const_frustumznear = -1;
-const const_frustumzfar = -5;
+const const_frustumznear = 1;
+const const_frustumzfar = 5;
 
 //cube
 // icare1
-const const_icare1size = 2;
-const const_icare1color = [1,0,0,0.3];
-const const_icare2size = 2;
-const const_icare2color =[0,1,0,0.3];
+const const_icare1size = 1;
+const const_icare1color = [1,0,0,0.8];
+const const_icare2size = 1;
+const const_icare2color =[0,1,0,0.8];
 
 
 //--------------- Global Vars --------------------------------------------------
@@ -114,17 +113,20 @@ function main()
 */
 
 			ogAddImageLayer(globe, {
-				url: ["http://owgdemo/data"],
+				//url: ["http://owgdemo/data"],
+				url: ["http://10.10.5.130/data"],
 				layer: "bluemarble",
 				service: "owg"
 			});
 			ogAddImageLayer(globe, {
-				url: ["http://owgdemo/data"],
+				//url: ["http://owgdemo/data"],
+				url: ["http://10.10.5.130/data"],
 				layer: "swissimage",
 				service: "owg"
 			});
 			ogAddElevationLayer(globe, {
-				url: ["http://owgdemo/data"],
+				//url: ["http://owgdemo/data"],
+				url: ["http://10.10.5.130/data"],
 				layer: "DHM25",
 				service: "owg"
 			});
@@ -133,7 +135,7 @@ function main()
 	
 	
 		
-	
+
   
    //Fly to start position
    ogSetPosition(cam,7.600771,46.760578,7000);
@@ -166,7 +168,7 @@ function main()
 	ogSetFlyToStartedFunction(ctx,function(){isflying=true;});
 	ogSetInPositionFunction(ctx,function(){isflying=false;});
 	
-	
+	ogSetKeyDownFunction(ctx, OnKeyDown);
 
 
 }
@@ -176,8 +178,20 @@ function onRender()
 	rtmodule.UpdateSoldierPositions();
 
 }
+function OnKeyDown(ctx,key)
+{
+   /*var scene = ogGetScene(ctx);
+   	var cam = ogGetActiveCamera(scene);
+	ogSetActiveCamera(cam);*/
 
-
+   if(key == 49) // 1 - Fly to Davos
+   {
+		pos = ogGetPosition(scene);
+		ori = ogGetOrientation(scene);
+		
+		console.log(pos.longitude+","+pos.latitude+","+pos.elevation+","+ori.yaw+","+ori.pitch+","+ori.roll);
+   }
+}
 //------- Show the time --------------------------------------------------------
 function settime () {
   var curtime = new Date();

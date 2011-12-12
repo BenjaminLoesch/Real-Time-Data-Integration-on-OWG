@@ -41,7 +41,7 @@ function Soldier(ogid,id)
 
 Soldier.prototype.SetData = function(posjson)
 {
-   this.lat=CHtoWGSlat(posjson.X,posjson.Y);
+   this.lat=CHtoWGSlat(posjson.X,posjson.Y); 
    this.latbuffer.unshift(lat);
    while(this.latbuffer.length>this.buffersize)
    {
@@ -64,13 +64,13 @@ Soldier.prototype.SetData = function(posjson)
 
    this.id=posjson.Id;
    
-   this.qx = posjson.Qy; 
+   this.qx = posjson.Qx; 
    this.qxbuffer.unshift(this.qx);
    while(this.qxbuffer.length>this.buffersize)
    {
      this.qxbuffer.pop();
    }
-   this.qy = posjson.Qx;
+   this.qy = posjson.Qy;
    
    this.qybuffer.unshift(this.qy);
    while(this.qybuffer.length>this.buffersize)
@@ -117,17 +117,18 @@ Soldier.prototype.Update= function()
 	var interpol_elv = t*this.elvbuffer[0]+(1-t)*this.elvbuffer[1];
 
 	
-	var quat1 = [this.qxbuffer[0],this.qybuffer[0],this.qzbuffer[0],this.qwbuffer[0]];
+	/*var quat1 = [this.qxbuffer[0],this.qybuffer[0],this.qzbuffer[0],this.qwbuffer[0]];
 	var quat2 = [this.qxbuffer[1],this.qybuffer[1],this.qzbuffer[1],this.qwbuffer[1]];
-	var quaternion = this.Slerp(t,quat2,quat1);
-	//var quaternion =[this.qx,this.qy,this.qz,this.qw];
+	var quaternion = this.Slerp(t,quat2,quat1);*/
+	var quaternion =[this.qx,this.qy,this.qz,this.qw];
 	ogSetGeometryPositionWGS84Quat(this.ogid,interpol_lng,interpol_lat,interpol_elv,quaternion);
 	
 	if(this.followmode)
 	{
 		var cam = ogGetActiveCamera(scene);
-		ogSetPosition(cam,interpol_lng,interpol_lat,interpol_elv);
-		ogSetOrientationFromQuaternion(cam, quaternion[0],quaternion[1],quaternion[2],quaternion[3]);	
+		/*ogSetPosition(cam,interpol_lng,interpol_lat,interpol_elv);
+		ogSetOrientationFromQuaternion(cam, quaternion[0],quaternion[1],quaternion[2],quaternion[3]);*/
+		this.SetCamera(cam,interpol_lng,interpol_lat,interpol_elv,quaternion);
 	}
 	
 	if(this.thirdmanview)
@@ -142,6 +143,44 @@ Soldier.prototype.Update= function()
 			this.updateThridManView=1;
 		}
 	}
+}
+
+
+
+Soldier.prototype.SetCamera = function(cam,lng,lat,elv,quats)
+{
+	var cam = ogGetActiveCamera(scene);
+	ogSetPosition(cam,lng,lat,elv);
+      
+   var sensor2owg = new mat4();
+   sensor2owg.SetFromArray([0,-1,0,0,  1,0,0,0,  0,0,1,0,  0,0,0,1]);
+   sensor2owg.Transpose();
+   
+  
+    // get rotation matrix out of quaternion
+   var rotfromquat = new mat4();
+   rotfromquat.FromQuaternionComponents(quats[0],quats[1],quats[2],quats[3]);
+   //rotfromquat is in sensor system
+   
+   
+   //convert rotation matrix into owg system
+   var rotfromquatowg = new mat4();
+   rotfromquatowg.Multiply(sensor2owg,rotfromquat);
+   //rotfromquatowg is rotation matrix in owg system
+   
+   
+   //roll 180°
+   var roll180head90 = new mat4();
+   //roll180.SetFromArray([1,0,0,0,  0,-1,0,0,  0,0,-1,0,  0,0,0,1]);
+   roll180head90.SetFromArray([0,1,0,0,  1,0,0,0,  0,0,-1,0,  0,0,0,1]);
+   roll180head90.Transpose();
+   
+   
+   var matfinal = new mat4();
+   matfinal.Multiply(rotfromquatowg,roll180head90);
+   var quat_owg = matfinal.Rot2Quat();
+	ogSetOrientationFromQuaternion(cam, quat_owg[0],quat_owg[1],quat_owg[2],quat_owg[3]);	
+
 }
 
 
