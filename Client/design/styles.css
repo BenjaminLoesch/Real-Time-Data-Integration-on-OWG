@@ -1,7 +1,5 @@
 body {
     font-family: sans-serif;
-   overflow-x : none;
-   overflow-y : none;
 }
 #divcanvas {
     position: absolute;
@@ -19,7 +17,7 @@ body {
 #divViewOptions {
     background-color: #FFFFFF;
     border-bottom-style: ridge;
-    height: 100px;
+    height: 152px;
     left: 0;
     position: absolute;
     top: 80px;
@@ -31,7 +29,7 @@ body {
     height: 154px;
     left: 0;
     position: absolute;
-    top: 183px;
+    top: 235px;
     width: 275px;
 }
 #divRealTimeDataOptions {
@@ -49,7 +47,7 @@ body {
     height: 100px;
     left: 0;
     position: absolute;
-    top: 340px;
+    top: 392px;
     width: 275px;
 }
 #divTimeDisplay {
@@ -72,14 +70,14 @@ body {
 }
 .settingtable {
     font-size: 10pt;
-    padding-left: 27px;
+    padding-left: 15px;
     padding-top: 5px;
 }
-
 .settingtable th {
-	/*color: #ff0000;*/
-	text-align: left;
-
+    text-align: left;
+}
+.viewbuttons {
+    width: 70px;
 }
 .onoffelement {
     padding-left: 10px;
@@ -112,10 +110,9 @@ body {
     top: 4px;
     width: 685px;
 }
-
-.button-active{
- border: 1px solid #ffaf0f !important;
- background: #f58400 url(images/ui-bg_inset-soft_30_f58400_1x100.png) 50% 50% repeat-x !important;
- font-weight: bold !important;
- color: #ffffff !important; 
+.button-active {
+    background: url("images/ui-bg_inset-soft_30_f58400_1x100.png") repeat-x scroll 50% 50% #F58400 !important;
+    border: 1px solid #FFAF0F !important;
+    color: #FFFFFF !important;
+    font-weight: bold !important;
 }

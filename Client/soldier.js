@@ -27,17 +27,29 @@ function Soldier(ogid,id)
 
 	//parameters...
 	this.buffersize = 2;	
-	this.updateInterval = 100; //ms
+	this.updateInterval = 120; //ms
 	
 	this.followmode = false;
 	this.thirdmanview = false;
 	
 	this.ishidden = false;
 	this.updateThridManView = 0;
+	
+	
+	/*this.jsonbuffer = [];
+	var sold = this;
+	this.timer = setInterval(function(){
+
+		sold.SetData(sold.jsonbuffer.pop());
+		},100);
+	*/	
 }
-
-
-
+/*
+Soldier.prototype.addToBuffer = function(posjson)
+{
+	this.jsonbuffer.push(posjson);
+}
+*/
 
 Soldier.prototype.SetData = function(posjson)
 {
@@ -115,19 +127,17 @@ Soldier.prototype.Update= function()
 	var interpol_lng = t*this.lngbuffer[0]+(1-t)*this.lngbuffer[1];
 	var interpol_lat = t*this.latbuffer[0]+(1-t)*this.latbuffer[1];
 	var interpol_elv = t*this.elvbuffer[0]+(1-t)*this.elvbuffer[1];
-
 	
-	/*var quat1 = [this.qxbuffer[0],this.qybuffer[0],this.qzbuffer[0],this.qwbuffer[0]];
+	
+	var quat1 = [this.qxbuffer[0],this.qybuffer[0],this.qzbuffer[0],this.qwbuffer[0]];
 	var quat2 = [this.qxbuffer[1],this.qybuffer[1],this.qzbuffer[1],this.qwbuffer[1]];
-	var quaternion = this.Slerp(t,quat2,quat1);*/
-	var quaternion =[this.qx,this.qy,this.qz,this.qw];
+	var quaternion = this.Slerp(t,quat2,quat1);
+	//var quaternion =[this.qx,this.qy,this.qz,this.qw];
 	ogSetGeometryPositionWGS84Quat(this.ogid,interpol_lng,interpol_lat,interpol_elv,quaternion);
 	
 	if(this.followmode)
 	{
 		var cam = ogGetActiveCamera(scene);
-		/*ogSetPosition(cam,interpol_lng,interpol_lat,interpol_elv);
-		ogSetOrientationFromQuaternion(cam, quaternion[0],quaternion[1],quaternion[2],quaternion[3]);*/
 		this.SetCamera(cam,interpol_lng,interpol_lat,interpol_elv,quaternion);
 	}
 	

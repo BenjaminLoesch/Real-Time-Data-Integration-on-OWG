@@ -145,8 +145,6 @@ RtPosModule.prototype.Init = function(oninitcallback,onclosecallback)
 }
 
 
-
-
 //------------------------------------------------------------------------------
 /*
  * @description handles the incoming message.
@@ -189,9 +187,18 @@ RtPosModule.prototype.OnNewPosition = function(message)
 			updateQualityIndicator(actualsoldier.id,actualsoldier.quality); //updates the quality indicator on homepage
 		}
 	
-		if(actualsoldier.msg != '')
+		/*beni edit 15.12.2011*/
+			if(posjson.Id == 'eth1')
+			{
+				posjson.Message = "y: "+posjson.Y+"  x: "+posjson.X+" h: "+posjson.Elv;
+			
+			}
+			//beni edit finished...
+			
+		if(posjson.msg != '')
 		{
-			updateMessageNode(actualsoldier.id,actualsoldier.msg); //updates the message div on homepage.
+			
+			updateMessageNode(actualsoldier.id,posjson.Message); //updates the message div on homepage.
 		}
    }
    else

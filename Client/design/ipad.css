@@ -17,11 +17,12 @@ body {
 #divViewOptions {
     background-color: #FFFFFF;
     border-bottom-style: ridge;
-    height: 140px;
+    height: 152px;
     left: 0;
     position: absolute;
     top: 80px;
-    width: 142px;
+    width: 240px;
+
 }
 #divPointCloudOptions {
     background-color: #FFFFFF;
@@ -75,6 +76,12 @@ body {
     font-size: 10pt;
     padding-left: 4px;
     padding-top: 5px;
+}
+.settingtable th {
+    text-align: left;
+}
+.viewbuttons {
+    width: 70px;
 }
 .onoffelement {
     padding-left: 10px;
